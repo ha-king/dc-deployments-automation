@@ -4,7 +4,7 @@
 #
 #    make > ../bitbucket-pipelines.yml
 
-image: debian:buster-20211220
+image: debian:buster-20211201
 options:
   size: 2x
 
