@@ -5,7 +5,7 @@ driver:
   name: docker
 platforms:
   - name: amazon_linux2
-    image: amazonlinux:2
+    image: amazonlinux:2.0.20211005.0
     groups:
       - aws_node_local
     ulimits:
