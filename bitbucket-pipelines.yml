@@ -336,7 +336,7 @@ pipelines:
            script:
              - ./bin/install-ansible --dev
              - cd roles/restore_backups
-             - pipenv run molecule test -s restore_conf_server
+             - pipenv run molecule --debug --verbose test -s restore_conf_server
         - step:
            name: restore_backups/restore_jira_clustered
            services:
@@ -344,7 +344,7 @@ pipelines:
            script:
              - ./bin/install-ansible --dev
              - cd roles/restore_backups
-             - pipenv run molecule test -s restore_jira_clustered
+             - pipenv run molecule --debug --verbose test -s restore_jira_clustered
 
         - step:
            name: Run Snyk security scan
