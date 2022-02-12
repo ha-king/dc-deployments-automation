@@ -73,6 +73,7 @@
           - "{{ test_archive_source }}/*"
         dest: "{{ test_archive }}"
         owner: "{{ atl_product_user }}"
+        mode: "664"
 
   tasks:
     - name: Install distro-specific restore support packages
