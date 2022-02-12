@@ -59,6 +59,14 @@
         - "{{ test_archive_source }}/attachments/image.jpg"
         - "{{ test_archive_source }}/shared-home/shared-content.txt"
 
+    - name: "debug: recursively list contents of /tmp"
+      shell: ls -lahR /tmp
+      register: ls_tmp
+
+    - name: "debug: print contents of /tmp"
+      debug:
+        msg: "{{ ls_tmp.stdout }}"
+
     - name: "{{ test_pre_step_prefix }} Archive the shared home"
       archive:
         path:
