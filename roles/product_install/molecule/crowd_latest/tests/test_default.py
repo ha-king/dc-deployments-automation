@@ -25,17 +25,17 @@ def test_version_file_is_latest(host):
     assert verfile.exists
 
     upstream_fd = urllib.request.urlopen(
-        "https://marketplace.atlassian.com/rest/2/applications/crowd/versions/latest")
+        "https://marketplace.atlassian.com/rest/2/products/key/crowd/versions")
     upstream_json = json.load(upstream_fd)
-    upstream = upstream_json['version']
+    upstream = upstream_json['_embedded']['versions'][0]['name']
 
     assert verfile.content.decode("UTF-8").strip() == upstream.strip()
 
 def test_latest_is_downloaded(host):
     upstream_fd = urllib.request.urlopen(
-        "https://marketplace.atlassian.com/rest/2/applications/crowd/versions/latest")
+        "https://marketplace.atlassian.com/rest/2/products/key/crowd/versions")
     upstream_json = json.load(upstream_fd)
-    upstream = upstream_json['version']
+    upstream = upstream_json['_embedded']['versions'][0]['name']
 
     installer = host.file('/media/atl/downloads/crowd.' + upstream + '.tar.gz')
     assert installer.exists
@@ -43,9 +43,9 @@ def test_latest_is_downloaded(host):
 
 def test_completed_lockfile(host):
     upstream_fd = urllib.request.urlopen(
-        "https://marketplace.atlassian.com/rest/2/applications/crowd/versions/latest")
+        "https://marketplace.atlassian.com/rest/2/products/key/crowd/versions")
     upstream_json = json.load(upstream_fd)
-    upstream = upstream_json['version']
+    upstream = upstream_json['_embedded']['versions'][0]['name']
 
     lockfile = host.file('/media/atl/downloads/crowd.' + upstream + '.tar.gz_completed')
     assert lockfile.exists
