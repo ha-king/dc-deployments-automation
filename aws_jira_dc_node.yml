@@ -27,6 +27,5 @@
       tags: [skip_on_stack_update]
     - role: database_init
       tags: [skip_on_stack_update]
-    - role: restore_backups
     - role: jira_config
     - role: product_startup

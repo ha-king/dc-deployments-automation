@@ -20,7 +20,6 @@
       tags: [skip_on_stack_update]
     - role: database_init
       tags: [skip_on_stack_update]
-    - role: restore_backups
     - role: confluence_common
     - role: confluence_config
     - role: product_startup

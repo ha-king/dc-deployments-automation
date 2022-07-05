@@ -1,9 +1,0 @@
----
-
-# Amazon Linux 2 supplies extra packages via a special command.
-- name: Enable Postgresql from 'extras'
-  command: amazon-linux-extras install -y "postgresql{{ postgres_version }}"
-  args:
-    creates: /usr/bin/psql
-  environment:
-    PYTHON: /bin/python
