@@ -1,4 +1,0 @@
----
-
-atl_backup_home_restore_canary_filename: ".slingshot_home_restore"
-atl_backup_home_restore_canary_path: "{{ atl_product_home_shared }}/{{ atl_backup_home_restore_canary_filename }}"

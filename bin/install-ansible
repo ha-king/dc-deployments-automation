@@ -23,7 +23,7 @@ fi
 export PATH=/usr/local/bin:$PATH
 export PIP_DEFAULT_TIMEOUT=60
 
-pip3 install pipenv
+pip3 install pipenv==2021.5.29
 echo "Installing ansible and dependencies..."
 PIPENV_NOSPIN=1 PIPENV_HIDE_EMOJIS=1 pipenv sync 2>&1 | iconv -c -f utf-8 -t ascii
 
