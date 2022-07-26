@@ -4,7 +4,7 @@
 #
 #    make > ../bitbucket-pipelines.yml
 
-image: debian:buster
+image: debian:bullseye
 options:
   size: 2x
 
@@ -241,15 +241,6 @@ pipelines:
              - cd roles/product_install
              - pipenv run molecule test -s jira_all
         - step:
-           name: product_install/jira_tarball_download_url
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_install
-             - pipenv run molecule test -s jira_tarball_download_url
-        - step:
            name: product_install/jira_cached_with_downgrade
            services:
              - docker
@@ -285,6 +276,15 @@ pipelines:
              - ./bin/install-ansible --dev
              - cd roles/product_install
              - pipenv run molecule test -s jira_tarball
+        - step:
+           name: product_install/jira_tarball_download_url
+           services:
+             - docker
+           script:
+             - export ANSIBLE_CONFIG=./ansible.cfg
+             - ./bin/install-ansible --dev
+             - cd roles/product_install
+             - pipenv run molecule test -s jira_tarball_download_url
         - step:
            name: product_install/jira_version_from_file
            services:
@@ -383,6 +383,6 @@ pipelines:
            script:
              - ./bin/install-ansible --dev
              - apt-get update && apt-get install -y npm
-             - npm install -g snyk@1.455.0
+             - npm install -g snyk
              - snyk auth $SNYK_TOKEN
              - pipenv run snyk monitor --severity-threshold=high --project-name=dc-deployments-automation
