@@ -9,9 +9,9 @@ boto3 = "==1.17.49"
 botocore = "==1.20.49"
 
 [dev-packages]
-molecule = "==3.2.2"
-molecule-docker = "==0.2.4"
-docker = "==4.4.1"
+molecule = "==4.0.1"
+molecule-docker = "==2.0.0"
+docker = "==5.0.3"
 taskcat = "*"
 pytest = "*"
 testinfra = "*"
