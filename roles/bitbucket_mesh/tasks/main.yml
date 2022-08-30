@@ -1,25 +1,10 @@
 ---
 
-- name: set up the bitbucket mesh group
-  ansible.builtin.group:
-    name: "{{ atl_product_user }}"
-    gid: 1001
-    state: present
-
-- name: set up the bitbucket mesh user
-  ansible.builtin.user:
-    name: "{{ atl_product_user }}"
-    uid: 1001
-    state: present
-    comment: "mesh_runtime_user"
-    groups: "{{ atl_product_user }}"
-    home: "{{ mesh_install_dir }}"
-
 - name: Create Bitbucket dirs if necessary
   ansible.builtin.file:
     path: "{{ item }}"
-    owner: "{{ atl_product_user }}"
-    group: "{{ atl_product_user }}"
+    owner: "{{ atl_product_user_uid }}"
+    group: "{{ atl_product_user_uid }}"
     mode: 0750
     state: directory
   with_items:
@@ -39,11 +24,12 @@
     group_id: "com.atlassian.bitbucket.mesh"
     artifact_id: "mesh-distribution"
     extension: "tar.gz"
+    version: "{{ atl_product_version }}"
     repository_url: "{{ bitbucket_mesh_maven_repo }}"
     dest: "{{ mesh_install_dir }}"
     mode: "0644"
-    owner: "{{ atl_product_user }}"
-    group: "{{ atl_product_user }}"
+    owner: "{{ atl_product_user_uid }}"
+    group: "{{ atl_product_user_uid }}"
   register: maven_download
 
 - name: debug
