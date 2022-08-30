@@ -1,0 +1,26 @@
+[Unit]
+Description=Atlassian bitbucket-mesh
+After=syslog.target network-online.target
+
+[Service]
+Type=forking
+UMask=0027
+User={{ atl_product_user }}
+Group={{ atl_product_user }}
+StandardOutput=journal+console
+StandardError=journal+console
+LimitNOFILE=65336
+Environment=MESH_HOME={{ atl_home_base }}/{{ atl_product_edition }}
+Environment=JAVA_HOME=/usr/lib/jvm/java
+Environment=JRE_HOME=/usr/lib/jvm/java
+Environment=JMX_REMOTE_AUTH=password
+Environment=JMX_PASSWORD_FILE=/var/atlassian/application-data/jmx/jmx.access
+Environment="JVM_SUPPORT_RECOMMENDED_ARGS=-Dmesh.enabled=true -Dplugin.bitbucket-git.mesh.sidecar.child-process=false -Dcom.sun.management.jmxremote.port=4444 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath={{ atl_home_base }}/{{ atl_product_edition }}/log"
+Environment=JVM_MAXIMUM_MEMORY={{ atl_jvm_heap }}
+PIDFile={{ atl_home_base }}/{{ atl_product_edition }}/log/mesh.pid
+PassEnvironment=JMX_REMOTE_AUTH JMX_PASSWORD_FILE JAVA_HOME
+ExecStart={{ mesh_install_dir }}/current/bin/start-mesh.sh
+ExecStop={{ mesh_install_dir }}/current/bin/stop-mesh.sh
+
+[Install]
+WantedBy=multi-user.target

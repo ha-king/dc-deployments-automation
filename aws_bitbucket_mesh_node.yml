@@ -1,0 +1,16 @@
+---
+- hosts: aws_node_local
+  become: true
+
+  vars:
+    # See group_vars/aws_node_local.yml, which pull vars from the environment.
+    atl_product_family: "stash"
+    atl_product_edition: "bitbucket"
+    atl_product_user: "bitbucket"
+
+
+  roles:
+    - role: linux_common
+    - role: aws_common
+    - role: product_common
+    - role: bitbucket_mesh
