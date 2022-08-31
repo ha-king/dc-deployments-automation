@@ -7,6 +7,7 @@
     atl_product_family: "stash"
     atl_product_edition: "mesh"
     atl_product_user: "bitbucket"
+    atl_product_home: "{{ atl_home_base }}/{{ atl_product_edition }}"
     atl_systemd_service_name: "mesh.service"
     atl_startup_systemd_params:
       - 'UMask=0027'

@@ -17,7 +17,7 @@ StandardError=journal+console
 
 {# Bitbucket DC sets up its service start/stop logging in a different way to all our other DC offerings and so we exclude it from having the catalina.out redirect and foreground startup #}
 {% if (atl_product_family == "stash") %}
-PIDFile={{ atl_product_home }}/log/bitbucket.pid
+PIDFile={{ atl_product_home }}/log/{{ atl_product_edition }}.pid
 ExecStart={{ atl_startup_exec_path }}{% for c in atl_startup_exec_options %} {{ c }}{% endfor %}
 
 ExecStop={{ atl_stop_exec_path }}
