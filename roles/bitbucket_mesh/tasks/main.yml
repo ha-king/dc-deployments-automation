@@ -58,7 +58,7 @@
 
 - name: template out mesh.properties
   ansible.builtin.template:
-    src: bitbucket-mesh.properties.j2
+    src: mesh.properties.j2
     dest: "{{ atl_home_base }}/{{ atl_product_edition }}/mesh.properties"
     owner: "{{ atl_product_user }}"
     group: "{{ atl_product_user }}"
