@@ -5,12 +5,25 @@
   vars:
     # See group_vars/aws_node_local.yml, which pull vars from the environment.
     atl_product_family: "stash"
-    atl_product_edition: "bitbucket"
+    atl_product_edition: "mesh"
     atl_product_user: "bitbucket"
-
+    atl_systemd_service_name: "mesh.service"
+    atl_startup_systemd_params:
+      - 'UMask=0027'
+      - 'Environment=MESH_HOME={{ atl_home_base }}/{{ atl_product_edition }}'
+      - 'Environment=JAVA_HOME=/usr/lib/jvm/java'
+      - 'Environment=JRE_HOME=/usr/lib/jvm/java'
+      - 'Environment=JMX_REMOTE_AUTH=password'
+      - 'Environment=JMX_PASSWORD_FILE=/var/atlassian/application-data/jmx/jmx.access'
+      - 'Environment="JVM_SUPPORT_RECOMMENDED_ARGS=-Dmesh.enabled=true -Dplugin.bitbucket-git.mesh.sidecar.child-process=false -Dcom.sun.management.jmxremote.port=4444 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath={{ atl_home_base }}/{{ atl_product_edition }}/log"'
+      - 'Environment=JVM_MAXIMUM_MEMORY={{ atl_jvm_heap }}'
+    atl_startup_exec_path: "{{ mesh_install_dir }}/current/bin/start-mesh.sh"
+    atl_stop_exec_path: "{{ mesh_install_dir }}/current/bin/stop-mesh.sh"
+    atl_systemd_service_target: "multi-user.target"
 
   roles:
     - role: linux_common
     - role: aws_common
     - role: product_common
     - role: bitbucket_mesh
+    - role: product_startup

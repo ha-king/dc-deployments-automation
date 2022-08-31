@@ -11,14 +11,6 @@
     - "{{ atl_home_base }}/{{ atl_product_edition }}"
     - "{{ mesh_install_dir }}"
 
-- name: Template out the mesh service file
-  ansible.builtin.template:
-    src: mesh.service.j2
-    dest: "/usr/lib/systemd/system/mesh.service"
-    owner: "root"
-    group: "root"
-    mode: 0740
-
 - name: download the mesh distribution using maven
   community.general.maven_artifact:
     group_id: "com.atlassian.bitbucket.mesh"
@@ -27,11 +19,38 @@
     version: "{{ atl_product_version }}"
     repository_url: "{{ bitbucket_mesh_maven_repo }}"
     dest: "{{ mesh_install_dir }}"
+    keep_name: yes
     mode: "0644"
     owner: "{{ atl_product_user_uid }}"
     group: "{{ atl_product_user_uid }}"
   register: maven_download
 
-- name: debug
-  debug:
-    var: maven_download
+- name: extract the downloaded artifact
+  ansible.builtin.unarchive:
+    src: "{{ maven_download.dest }}"
+    dest: "/opt/atlassian/mesh/"
+    creates: "/opt/atlassian/mesh/atlassian-bitbucket-mesh-{{ atl_product_version }}"
+    mode: 0755
+    owner: "{{ atl_product_user }}"
+    group: "{{ atl_product_user }}"
+  register: mesh_extract
+  when:
+    - maven_download.changed | bool
+    - not maven_download.failed
+
+# the owner/group on the unarchive above isn't thorough
+- name: adjust permissions on the extracted directory
+  ansible.builtin.file:
+    state: directory
+    path: "/opt/atlassian/mesh/atlassian-bitbucket-mesh-{{ atl_product_version }}"
+    owner: "{{ atl_product_user }}"
+    group: "{{ atl_product_user }}"
+    recurse: yes
+
+- name: symlink to the current version
+  ansible.builtin.file:
+    src: "/opt/atlassian/mesh/atlassian-bitbucket-mesh-{{ atl_product_version }}"
+    dest: "/opt/atlassian/mesh/current"
+    state: link
+  when:
+    - mesh_extract.changed | bool
