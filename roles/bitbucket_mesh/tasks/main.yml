@@ -59,7 +59,7 @@
 
 - name: touch the jmx password file
   ansible.builtin.file:
-    src: '/var/atlassian/application-data/jmx/jmx.access'
+    path: "{{ atl_home_base }}/{{ atl_product_edition }}/jmx.access"
     state: touch
     owner: "{{ atl_product_user_uid }}"
     group: "{{ atl_product_user_uid }}"
