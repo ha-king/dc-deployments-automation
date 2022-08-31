@@ -7,8 +7,10 @@
     group: "{{ atl_product_user_uid }}"
     mode: 0750
     state: directory
+    recurse: yes
   with_items:
     - "{{ atl_home_base }}/{{ atl_product_edition }}"
+    - "{{ atl_home_base }}/{{ atl_product_user }}"
     - "{{ mesh_install_dir }}"
 
 - name: download the mesh distribution using maven
@@ -54,3 +56,11 @@
     state: link
   when:
     - mesh_extract.changed | bool
+
+- name: touch the jmx password file
+  ansible.builtin.file:
+    src: '/var/atlassian/application-data/jmx/jmx.access'
+    state: touch
+    owner: "{{ atl_product_user_uid }}"
+    group: "{{ atl_product_user_uid }}"
+    mode: 0600
