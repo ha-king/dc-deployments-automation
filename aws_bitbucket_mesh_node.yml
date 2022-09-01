@@ -14,9 +14,11 @@
       - 'Environment=MESH_HOME={{ atl_home_base }}/{{ atl_product_edition }}'
       - 'Environment=JAVA_HOME=/usr/lib/jvm/java'
       - 'Environment=JRE_HOME=/usr/lib/jvm/java'
+      - 'Environment=JMX_REMOTE_AUTH=password'
+      - 'Environment=JMX_PASSWORD_FILE={{ atl_home_base }}/{{ atl_product_edition }}/jmx.access'
       - 'Environment="JVM_SUPPORT_RECOMMENDED_ARGS=-Dmesh.enabled=true -Dplugin.bitbucket-git.mesh.sidecar.child-process=false -Dcom.sun.management.jmxremote.port=4444 -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath={{ atl_home_base }}/{{ atl_product_edition }}/log"'
       - 'Environment=JVM_MAXIMUM_MEMORY={{ atl_jvm_heap }}'
-      - 'PassEnvironment=JAVA_HOME'
+      - 'PassEnvironment=JMX_REMOTE_AUTH JMX_PASSWORD_FILE JAVA_HOME'
 
     atl_startup_exec_path: "{{ mesh_install_dir }}/current/bin/start-mesh.sh"
     atl_stop_exec_path: "{{ mesh_install_dir }}/current/bin/stop-mesh.sh"

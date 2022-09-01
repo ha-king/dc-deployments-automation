@@ -56,6 +56,14 @@
   when:
     - mesh_extract.changed | bool
 
+- name: touch the jmx password file
+  ansible.builtin.file:
+    path: "{{ atl_home_base }}/{{ atl_product_edition }}/jmx.access"
+    state: touch
+    owner: "{{ atl_product_user_uid }}"
+    group: "{{ atl_product_user_uid }}"
+    mode: 0600
+
 - name: template out mesh.properties
   ansible.builtin.template:
     src: mesh.properties.j2
