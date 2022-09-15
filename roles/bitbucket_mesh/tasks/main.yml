@@ -64,10 +64,10 @@
     group: "{{ atl_product_user_uid }}"
     mode: 0600
 
-- name: template out mesh.properties
-  ansible.builtin.template:
-    src: mesh.properties.j2
-    dest: "{{ atl_home_base }}/{{ atl_product_edition }}/mesh.properties"
-    owner: "{{ atl_product_user }}"
-    group: "{{ atl_product_user }}"
-    mode: 0600
+# - name: template out mesh.properties
+#   ansible.builtin.template:
+#     src: mesh.properties.j2
+#     dest: "{{ atl_home_base }}/{{ atl_product_edition }}/mesh.properties"
+#     owner: "{{ atl_product_user }}"
+#     group: "{{ atl_product_user }}"
+#     mode: 0600
