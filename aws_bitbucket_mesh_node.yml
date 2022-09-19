@@ -28,6 +28,7 @@
   roles:
     - role: linux_common
     - role: aws_common
+    - role: aws_shared_fs_config
     - role: product_common
     - role: bitbucket_mesh
     - role: product_startup
