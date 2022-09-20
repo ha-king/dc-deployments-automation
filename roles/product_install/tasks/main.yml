@@ -185,6 +185,7 @@
         dest: "{{ atl_product_temp_download }}"
         mode: 0755
         force: false
+        http_agent: "ansible-httpget_{{ atl_localansible_playbook }}"
       register: atl_product_completed
 
     # If product installer was fetched make the lock directory
