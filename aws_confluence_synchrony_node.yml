@@ -1,6 +1,7 @@
 ---
 
-- hosts: aws_node_local
+- name: aws_confluence_synchrony_node.yml
+  hosts: aws_node_local
   become: true
 
   vars:

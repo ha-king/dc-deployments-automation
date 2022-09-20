@@ -1,5 +1,6 @@
 ---
-- hosts: aws_node_local
+- name: aws_crowd_dc_node.yml
+  hosts: aws_node_local
   become: true
 
   vars:

@@ -1,5 +1,6 @@
 ---
-- hosts: aws_node_local
+- name: aws_bitbucket_nfs_node.yml
+  hosts: aws_node_local
   become: true
 
   vars:
