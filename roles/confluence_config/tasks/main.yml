@@ -1,7 +1,7 @@
 ---
 
 - name: Create application directories
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     mode: 0750
@@ -17,28 +17,25 @@
 # Create symlink to force single (unclustered) Confluence to store
 # shared-data and attachments in the shared drive.
 - name: Symlink local attachments to shared storage
-  file:
-    src: "{{ item.0 }}"
-    dest: "{{ item.1 }}"
+  ansible.builtin.file:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
     force: false
     state: link
     mode: 0750
     owner: "{{ atl_product_user }}"
     group: "{{ atl_product_user }}"
-  vars:
-    - links:
-        - ["{{ atl_product_home_shared }}/", "{{ atl_product_home }}/shared-home"]
-        - ["{{ atl_product_home_shared }}/attachments/", "{{ atl_product_home }}/attachments"]
-  with_nested:
-    - "{{ links }}"
+  loop:
+    - {src: "{{ atl_product_home_shared }}/", dest: "{{ atl_product_home }}/shared-home"}
+    - {src: "{{ atl_product_home_shared }}/attachments/", dest: "{{ atl_product_home }}/attachments"}
 
 - name: Create Tomcat server config
-  template:
+  ansible.builtin.template:
     src: server.xml.j2
     dest: "{{ atl_product_installation_versioned }}/conf/server.xml"
 
 - name: Override JVM memory settings.
-  replace:
+  ansible.builtin.replace:
     path: "{{ atl_product_installation_versioned }}/bin/setenv.sh"
     regexp: "-{{ item }}\\d+m "
     replace: "-{{ item }}{{ atl_jvm_heap }} "
@@ -47,30 +44,30 @@
     - 'Xms'
 
 - name: Set the Tomcat environment
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ atl_product_installation_versioned }}/bin/setenv.sh"
     insertafter: "EOF"
     line: 'export CATALINA_OPTS="${CATALINA_OPTS} {{ atl_catalina_opts }} {{ atl_catalina_opts_extra }}"'
 
 - name: Configure login properties
-  template:
+  ansible.builtin.template:
     src: seraph-config.xml.j2
     dest: "{{ atl_product_installation_versioned }}/confluence/WEB-INF/classes/seraph-config.xml"
 
 - name: Configure Confluence home directory
-  template:
+  ansible.builtin.template:
     src: confluence-init.properties.j2
     dest: "{{ atl_product_installation_versioned }}/confluence/WEB-INF/classes/confluence-init.properties"
 
 - name: Create Confluence configuration
-  template:
+  ansible.builtin.template:
     src: confluence.cfg.xml.j2
     dest: "{{ atl_product_home }}/confluence.cfg.xml"
     owner: "{{ atl_product_user }}"
     group: "{{ atl_product_user }}"
 
 - name: Limit permissions on the installation directory
-  file:
+  ansible.builtin.file:
     path: "{{ atl_product_installation_versioned }}"
     owner: "root"
     group: "root"
@@ -83,7 +80,7 @@
   changed_when: false  # For Molecule idempotence check
 
 - name: Grant access to the product working directories
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     mode: "u=rwX,g=rX,o-rwx"
@@ -97,7 +94,7 @@
   changed_when: false  # For Molecule idempotence check
 
 - name: Create conf/Catalina directory owned by product so catalina.out logging works
-  file:
+  ansible.builtin.file:
     path: "{{ atl_product_installation_versioned }}/conf/Catalina"
     state: directory
     mode: "u=rwX,g=rX,o-rwx"
@@ -106,7 +103,7 @@
   changed_when: false  # For Molecule idempotence check
 
 - name: Assert baseurl to same as atl_proxy_name
-  postgresql_query:
+  community.postgresql.postgresql_query:
     login_host: "{{ atl_db_host }}"
     login_user: "{{ atl_jdbc_user }}"
     login_password: "{{ atl_jdbc_password }}"
@@ -126,11 +123,11 @@
   ignore_errors: yes  # For Molecule as it has no db test framework included
 
 - name: Create JVM font fallback directories
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     mode: 0755
   with_items: "{{ atl_fonts_fallback_dirs }}"
 
 - name: Install & configure distro language fonts
-  include_tasks: "{{ ansible_distribution|lower }}_fonts.yml"
+  ansible.builtin.include_tasks: "{{ ansible_distribution|lower }}_fonts.yml"

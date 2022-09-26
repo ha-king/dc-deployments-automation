@@ -34,7 +34,7 @@
     - role: aws_common
     # For Bitbucket DC clusters that store repos on Bitbucket Mesh(https://confluence.atlassian.com/bitbucketserver/bitbucket-data-center-and-server-8-0-release-notes-1115659343.html#BitbucketDataCenterandServer8.0releasenotes-mesh),
     # nodes may be setup to use EFS instead of NFS for shared_home by not defining 'atl_fileserver_host'
-    - { role: aws_shared_fs_config, when: (atl_fileserver_host is not defined or atl_fileserver_host |length == 0) and (atl_efs_id|length > 0) }
+    - { role: aws_shared_fs_config, when: (atl_fileserver_host is not defined or atl_fileserver_host | length == 0) and (atl_efs_id | length > 0) }
     - { role: nfs_mount, when : (atl_fileserver_host is defined) and (atl_fileserver_host|length > 0) }
     - role: product_common
     - role: product_install

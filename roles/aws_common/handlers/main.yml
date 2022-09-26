@@ -1,15 +1,15 @@
 ---
 
 - name: Enable CloudWatch Agent
-  systemd:
+  ansible.builtin.systemd:
     name: "amazon-cloudwatch-agent.service"
     daemon_reload: true
     enabled: true
-  when: atl_aws_agent_restart
+  when: atl_aws_agent_restart | bool
 
 - name: Restart CloudWatch Agent
-  systemd:
+  ansible.builtin.systemd:
     name: "amazon-cloudwatch-agent.service"
     enabled: true
     state: restarted
-  when: atl_aws_agent_restart
+  when: atl_aws_agent_restart | bool

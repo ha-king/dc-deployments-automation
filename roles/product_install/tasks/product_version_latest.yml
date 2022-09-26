@@ -5,9 +5,9 @@
 # product that supports the standard marketplace API.
 
 - name: Fetch the latest version from URL
-  set_fact:
+  ansible.builtin.set_fact:
     atl_product_version_json: "{{ lookup('url', '{{ atl_product_latest_version_url }}') }}"
 
 - name: Set the local var to retrieved version
-  set_fact:
+  ansible.builtin.set_fact:
     atl_latest_version: "{{ atl_product_version_json._embedded.versions[0].name }}"

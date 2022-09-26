@@ -1,7 +1,7 @@
 ---
 
 - name: Create Bitbucket shared dir if necessary
-  file:
+  ansible.builtin.file:
     path: "{{ atl_product_home_shared }}"
     owner: "{{ atl_product_user }}"
     group: "{{ atl_product_user }}"
@@ -9,14 +9,14 @@
     state: directory
 
 - name: Create Bitbucket config file
-  template:
+  ansible.builtin.template:
     src: bitbucket.properties.j2
     dest: "{{ atl_product_home_shared }}/bitbucket.properties"
     owner: "{{ atl_product_user }}"
     group: "{{ atl_product_user }}"
 
 - name: Remove write permissions from installation directory
-  file:
+  ansible.builtin.file:
     path: "{{ atl_product_installation_versioned }}"
     owner: "root"
     group: "root"
@@ -25,7 +25,7 @@
   changed_when: false  # For Molecule idempotence check
 
 - name: Create conf/Catalina directory so catalina.out logging works
-  file:
+  ansible.builtin.file:
     path: "{{ atl_product_installation_versioned }}/conf/Catalina"
     state: directory
     mode: "u=rwX,g=rX,o-rwx"

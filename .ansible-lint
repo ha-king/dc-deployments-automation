@@ -1,0 +1,11 @@
+---
+kinds:
+  - playbook: "./aws_*.yml"
+offline: true
+skip_list:
+  - ignore-errors
+  - meta-no-info
+  - name[casing]  # so many of our task names aren't capitalized
+  - name[missing]  # some tasks have no name
+  - risky-file-permissions
+  - yaml  # many, many warnings

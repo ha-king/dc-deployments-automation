@@ -1,6 +1,4 @@
 ---
-dependency:
-  name: galaxy
 driver:
   name: docker
 platforms:
@@ -18,6 +16,8 @@ platforms:
       - nofile:262144:262144
 provisioner:
   name: ansible
+  env:
+    ANSIBLE_COLLECTIONS_PATH: "../../"
   options:
     skip-tags: runtime_pkg
   inventory:

@@ -4,17 +4,17 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-ansible = "==2.10.7"
-boto3 = "==1.17.49"
-botocore = "==1.20.49"
+ansible-core = "==2.13.3"
+boto3 = "==1.24.68"
+botocore = "==1.27.68"
+psycopg2-binary = "==2.9.3"
 
 [dev-packages]
-molecule = "==3.2.2"
-molecule-docker = "==0.2.4"
-docker = "==4.4.1"
-taskcat = "*"
+molecule = "==4.0.1"
+molecule-docker = "==2.0.0"
+docker = "==6.0.0"
 pytest = "*"
-testinfra = "*"
+pytest-testinfra = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3"

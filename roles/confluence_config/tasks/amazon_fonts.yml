@@ -1,13 +1,15 @@
 ---
 
 - name: Install Google Noto fonts for language coverage
-  yum:
+  ansible.builtin.yum:
     name:
       - "google-noto-*"
+  vars:
+    ansible_python_interpreter: /usr/bin/python2
 
 - name: Link the language fonts into the JDK
   # Not idiomatic, but cleaner than messing with nested lookups...
-  shell:
+  ansible.builtin.shell:
     cmd: "ln -sf /usr/share/fonts/google-noto*/* {{ item }}/"
     creates: "{{ item }}/NotoSansJavanese-Regular.ttf"
     warn: false

@@ -1,16 +1,16 @@
 ---
 
 - name: Install distro-specific NFS packages
-  include_tasks: "{{ ansible_distribution|lower }}.yml"
+  ansible.builtin.include_tasks: "{{ ansible_distribution|lower }}.yml"
 
 
 - name: Create mountpoint
-  file:
+  ansible.builtin.file:
     path: "{{ atl_shared_mountpoint }}"
     state: directory
 
 - name: Setup the disk partition
-  parted:
+  community.general.parted:
     device: "{{ atl_nfs_server_device }}"
     label: gpt
     name: "{{ atl_nfs_fs_label }}"
@@ -22,7 +22,7 @@
 
 
 - name: Create the filesystem
-  filesystem:
+  community.general.filesystem:
     dev: "{{ atl_nfs_server_device }}"
     fstype: "{{ atl_nfs_fs_type }}"
     opts: "-L {{ atl_nfs_fs_label }}"
@@ -30,7 +30,7 @@
     - new_only
 
 - name: Setup fstab and mount the filesystem
-  mount:
+  ansible.posix.mount:
     path: "{{ atl_shared_mountpoint }}"
     src: "LABEL={{ atl_nfs_fs_label }}"
     fstype: "{{ atl_nfs_fs_type }}"
@@ -40,7 +40,7 @@
 
 
 - name: Create the shared home
-  file:
+  ansible.builtin.file:
     path: "{{ atl_shared_mountpoint }}/{{ atl_product_user }}/shared"
     state: directory
     owner: "{{ atl_product_user }}"
@@ -51,14 +51,14 @@
 
 
 - name: Create the NFS export file
-  template:
+  ansible.builtin.template:
     src: "media-atl.exports.j2"
     dest: "/etc/exports.d/20-media-atl.exports"
   notify:
     - Restart NFS
 
 - name: Enable NFS
-  service:
+  ansible.builtin.service:
     name: nfs.service
     enabled: true
     state: started

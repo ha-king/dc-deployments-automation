@@ -10,11 +10,11 @@
 
   pre_tasks:
     - name: Create cache dir
-      file:
+      ansible.builtin.file:
         path: '/media/atl/jira/shared/'
         state: directory
     - name: Seed version
-      copy:
+      ansible.builtin.copy:
         dest: '/media/atl/jira/shared/jira-core.version'
         content: "7.9.0"
         force: false  # For idempotency check

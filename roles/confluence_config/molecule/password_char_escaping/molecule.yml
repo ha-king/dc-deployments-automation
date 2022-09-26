@@ -1,6 +1,4 @@
 ---
-dependency:
-  name: galaxy
 driver:
   name: docker
 
@@ -15,6 +13,8 @@ platforms:
       - aws_node_local
 provisioner:
   name: ansible
+  env:
+    ANSIBLE_COLLECTIONS_PATH: "../../"
   options:
     skip-tags: runtime_pkg
   inventory:

@@ -1,7 +1,7 @@
 ---
 
 - name: Check for alternate obr download url
-  set_fact:
+  ansible.builtin.set_fact:
     atl_source_obr_from_marketplace: false
   when:
     - atl_obr_download_url is defined
@@ -10,40 +10,40 @@
   block:
 
     - name: Marketplace OBR - Get the installer product version info
-      uri:
+      ansible.builtin.uri:
         url: "{{ atl_mpac_products }}/key/jira/versions/name/{{ atl_product_version }}"
         return_content: yes
       register: atl_product_version_info
 
     - name: Marketplace OBR - Show the returned build number
-      debug:
+      ansible.builtin.debug:
         msg="buildNumber={{ atl_product_version_info.json.buildNumber }}"
 
     - name: Marketplace OBR - Get the JSD build version info
-      uri:
+      ansible.builtin.uri:
         url: "{{ atl_mpac_products }}/key/jira-servicedesk/versions/latest?application=\
         jira&applicationBuild={{ atl_product_version_info.json.buildNumber }}"
         return_content: yes
       register: atl_jsd_build_info
 
     - name: Marketplace OBR - Show the returned obr binary href
-      debug:
+      ansible.builtin.debug:
         msg="obr_ref={{ atl_jsd_build_info.json._embedded.artifact._links.binary.href }}"
 
     - name: Marketplace OBR - Set atl_obr_download_url
-      set_fact:
+      ansible.builtin.set_fact:
         atl_obr_download_url: "{{ atl_jsd_build_info.json._embedded.artifact._links.binary.href }}"
 
     - name: Marketplace OBR - Set atl_jsd_build
-      set_fact:
+      ansible.builtin.set_fact:
         atl_jsd_build: "{{ atl_jsd_build_info.json.name }}"
 
     - name: Marketplace OBR - Show the obr filename
-      debug:
+      ansible.builtin.debug:
         msg="obr_name=jira-servicedesk-application-{{ atl_jsd_build }}.obr"
 
     - name: Marketplace OBR - Set the obr filename
-      set_fact:
+      ansible.builtin.set_fact:
         atl_obr_filename: "jira-servicedesk-application-{{ atl_jsd_build }}.obr"
 
   when:
@@ -56,18 +56,18 @@
   block:
 
     - name: Alternate URL OBR - Show the obr filename
-      debug:
+      ansible.builtin.debug:
         msg="obr_name=jira-servicedesk-application-{{ atl_jsd_build }}.obr"
 
     - name: Alternate OBR - Set the obr filename
-      set_fact:
+      ansible.builtin.set_fact:
         atl_obr_filename: "jira-servicedesk-application-{{ atl_jsd_build }}.obr"
 
   when:
     - not atl_source_obr_from_marketplace | bool
 
 - name: is shared_home set ?
-  debug:
+  ansible.builtin.debug:
     msg="atl_product_home_shared_download_dir={{ atl_product_home_shared_download_dir }}"
 
 # For the first run a temp obr should be downloaded but moved to
@@ -77,7 +77,7 @@
 # a directory is used as a lockfile (atomic operation) when moving obr.
 
 - name: Set assumptions to avoid race condition
-  set_fact:
+  ansible.builtin.set_fact:
     download_obr: true
     move_obr: false
     atl_obr_download: "{{ atl_installer_temp }}/{{ atl_obr_filename }}"
@@ -87,22 +87,22 @@
 
 # Check for pre-downloaded obr on shared_home and completed lock dir.
 - name: Check for completed lock directory
-  stat:
+  ansible.builtin.stat:
     path: "{{ atl_obr_completed_lock }}"
   register: completed_lock
 
 - name: Check for obr in home_shared
-  stat:
+  ansible.builtin.stat:
     path: "{{ atl_obr_shared_download }}"
   register: home_shared_download
 
 - name: debug home_shared_download
-  debug:
+  ansible.builtin.debug:
     var: home_shared_download
 
 # If obr exists and lockdir exists use this obr instead
 - name: Check lock directory and obr exists on shared_home
-  set_fact:
+  ansible.builtin.set_fact:
     download_obr: false
     atl_obr_download: "{{ atl_obr_shared_download }}"
   when:
@@ -114,14 +114,14 @@
 # Fetch obr if required - note we validate it by mimetype rather than checksum due to https://ecosystem.atlassian.net/browse/AMKT-25526
 - name: download_obr is true so fetch and do all the things
   block:
-    - debug:
+    - ansible.builtin.debug:
         var: atl_obr_download_url
-    - debug:
+    - ansible.builtin.debug:
         var: atl_obr_download
 
     # Fetch obr and copy to temp
     - name: Fetch obr
-      get_url:
+      ansible.builtin.get_url:
         url: "{{ atl_obr_download_url }}"
         dest: "{{ atl_obr_download }}"
         mode: 0755
@@ -130,12 +130,12 @@
       register: atl_obr_completed
 
     - name: Confirm the output from the download task
-      debug:
+      ansible.builtin.debug:
         var: atl_obr_completed
 
     # get details about the obr
     - name: Stat the new obr file
-      stat:
+      ansible.builtin.stat:
         path: "{{ atl_obr_completed.dest }}"
         get_mime: yes
       register: atl_obr_stats
@@ -143,14 +143,14 @@
         - atl_obr_completed.dest is defined
 
     - name: fail if the downloaded OBR is not a zip file
-      fail:
+      ansible.builtin.fail:
         msg: "The downloaded OBR was not detected as being a valid ZIP file: {{ atl_obr_stats }}"
       when:
         - (atl_obr_stats.stat.mimetype is not defined) or (atl_obr_stats.stat.mimetype is not match("application/zip"))
 
     # If obr was fetched make the lock directory
     - name: Create moving_lock.
-      file:
+      ansible.builtin.file:
         path: "{{ atl_obr_moving_lock }}"
         state: directory
       when:
@@ -160,7 +160,7 @@
     # Directory lock was created by this run?
     # If so, then set a fact intending to move obr
     - name: Move obr Scenario - lock created by this run
-      set_fact:
+      ansible.builtin.set_fact:
         move_obr: true
       when:
         - moving_lock_created is succeeded
@@ -168,28 +168,28 @@
         # Otherwise directory lock was either already created or
         # could not be created. Fall back is to continue and install from temp
 
-  when: download_obr
+  when: download_obr | bool
 
 # If the intention is to move obr to home_shared
 - name: Move obr to home_shared
   block:
 
     - name: Copy temp installer to home_shared
-      copy:
+      ansible.builtin.copy:
         src: "{{ atl_obr_download }}"
         dest: "{{ atl_obr_shared_download }}"
         remote_src: true
       register: copied
 
     - name: Create completed_lock once obr downloaded and copied
-      file:
+      ansible.builtin.file:
         path: "{{ atl_obr_completed_lock }}"
         state: directory
       when: copied is succeeded
       register: completed_lock_created
 
     - name: Remove moving_lock to show that obr is completed
-      file:
+      ansible.builtin.file:
         path: "{{ atl_obr_moving_lock }}"
         state: absent
       when:
@@ -198,24 +198,24 @@
       register: moving_lock_removed
 
     - name: Delete old temp installer
-      file:
+      ansible.builtin.file:
         path: "{{ atl_obr_download }}"
         state: absent
       when: moving_lock_removed is succeeded
       register: temp_deleted
 
     - name: Set install to home_shared location
-      set_fact:
+      ansible.builtin.set_fact:
         atl_obr_download: "{{ atl_obr_shared_download }}"
       when: temp_deleted is succeeded
 
-  when: move_obr
+  when: move_obr | bool
 
 # At this point the binary is in {{ atl_obr_download }}
 # (which is either on home_shared or temp)
 
 - name: Ensure instaled-plugins dir exists
-  file:
+  ansible.builtin.file:
     path: "{{ atl_product_home_shared }}/plugins/installed-plugins"
     state: directory
     mode: 0750
@@ -224,7 +224,7 @@
 
 # Note as ansible unarchive cant handle "-j junk paths" we need to ignore errors to bypass the path verify
 - name: Unpack the obr into the atlassian-bundled-plugins dir
-  unarchive:
+  ansible.builtin.unarchive:
     remote_src: yes
     src: "{{ atl_obr_download }}"
     dest: "{{ atl_product_installation_versioned }}/atlassian-jira/WEB-INF/atlassian-bundled-plugins"
@@ -238,15 +238,15 @@
     mode: 0644
   register: obr_unpack
 
-- name: Move JSD dependency jars into the bundled-plugins dir      # noqa 503 - ignore lint info about when changed
-  copy:
+- name: Move JSD dependency jars into the bundled-plugins dir      # noqa no-handler - ignore lint info about when changed
+  ansible.builtin.copy:
     remote_src: yes
     src: "{{ atl_product_installation_versioned }}/atlassian-jira/WEB-INF/atlassian-bundled-plugins/dependencies/"
     dest: "{{ atl_product_installation_versioned }}/atlassian-jira/WEB-INF/atlassian-bundled-plugins/"
   when: obr_unpack.changed
 
-- name: Remove the empty dependencies folder      # noqa 503 - ignore lint info about when changed
-  file:
+- name: Remove the empty dependencies folder      # noqa no-handler - ignore lint info about when changed
+  ansible.builtin.file:
     path: "{{ atl_product_installation_versioned }}/atlassian-jira/WEB-INF/atlassian-bundled-plugins/dependencies"
     state: absent
   when: obr_unpack.changed

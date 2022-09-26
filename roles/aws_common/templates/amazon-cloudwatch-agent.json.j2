@@ -4,7 +4,7 @@
     "run_as_user": "root"
   },
 
-  {% if atl_aws_enable_cloudwatch_logs is defined and atl_aws_enable_cloudwatch_logs %}
+  {% if atl_aws_enable_cloudwatch_logs is defined and atl_aws_enable_cloudwatch_logs | bool %}
     "logs": {
       "logs_collected": {
         "files": {

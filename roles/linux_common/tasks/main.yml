@@ -3,32 +3,31 @@
 # Note: Try and limit these to packages that are distro-specific, and
 # place commonly-named ones below.
 - name: Install distro-specific prerequisites
-  include_tasks: "{{ ansible_distribution|lower }}.yml"
+  ansible.builtin.include_tasks: "{{ ansible_distribution|lower }}.yml"
 
 - name: Install common support packages
-  package:
+  ansible.builtin.package:
     name:
       - jq
       - tar
       - curl
       - unzip
       - fontconfig
-      - python-psycopg2
 
 - name: Create product group
-  group:
+  ansible.builtin.group:
     name: "{{ atl_product_user }}"
     gid: "{{ atl_product_user_uid }}"
 
 - name: Create product user
-  user:
+  ansible.builtin.user:
     name: "{{ atl_product_user }}"
     uid: "{{ atl_product_user_uid }}"
     group: "{{ atl_product_user }}"
     comment: "Product runtime user"
 
 - name: Stop systemd-cleanup deleting the jvm socket file
-  copy:
+  ansible.builtin.copy:
     src: java.conf
     dest: "/usr/lib/tmpfiles.d/java.conf"
     owner: root
@@ -37,7 +36,7 @@
   register: systemd_config_changed
 
 - name: Force systemd to reload daemon configuration
-  systemd:
+  ansible.builtin.systemd:
     daemon_reload: yes
   when:
     - systemd_config_changed is defined

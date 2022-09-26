@@ -1,24 +1,24 @@
 ---
 - name: Force all notified handlers to run at this point, not waiting for normal sync points
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers
 
 - name: wait for port 7990 to be up
-  wait_for:
+  ansible.builtin.wait_for:
     port: 7990
     delay: 60
 
 - name: wait for path to become available
-  wait_for:
+  ansible.builtin.wait_for:
     path: "{{ atl_product_home_shared }}/data/migration/import"
     delay: 60
 
 - name: Copy Bitbucket dataset from s3
-  get_url:
+  ansible.builtin.get_url:
     url: "{{ atl_bitbucket_dataset_url }}"
     dest: "{{ atl_product_home_shared }}/data/migration/import"
 
 - name: Invoke Import API
-  uri: 
+  ansible.builtin.uri:
     url: "{{ atl_bitbucket_baseurl }}/rest/api/1.0/migration/imports"
     user: admin
     password: "{{ atl_bitbucket_admin_password }}"
@@ -36,7 +36,7 @@
   failed_when: output is defined and output.json is defined and output.json.state != 'INITIALISING'
 
 - name: get import status
-  uri: 
+  ansible.builtin.uri:
     url: "{{ atl_bitbucket_baseurl }}/rest/api/1.0/migration/imports/{{ output.json.id }}"
     user: admin
     password: "{{ atl_bitbucket_admin_password }}"
@@ -50,7 +50,7 @@
   delay: 10
 
 - name: create lock file
-  file: 
+  ansible.builtin.file: 
     path: "{{ atl_product_home_shared }}/data/migration/import/lock.file"
     state: touch
   when: import_status.json.state == 'COMPLETED'

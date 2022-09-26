@@ -4,11 +4,13 @@
 #
 #    make > ../bitbucket-pipelines.yml
 
-image: debian:buster
+image: debian:bullseye
 options:
   size: 2x
 
 definitions:
+  caches:
+    ansible-collections: ansible_collections
   services:
     docker:
       memory: 4096
@@ -34,178 +36,258 @@ pipelines:
 
     - parallel:
         - step:
-           name: aws_common/cw-disabled
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/aws_common
-             - pipenv run molecule test -s cw-disabled
+            name: aws_common/cw-disabled
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/aws_common
+              - pipenv run molecule test -s cw-disabled
         - step:
-           name: aws_common/default
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/aws_common
-             - pipenv run molecule test -s default
+            name: aws_common/default
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/aws_common
+              - pipenv run molecule test -s default
         - step:
-           name: aws_common/logs-disabled
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/aws_common
-             - pipenv run molecule test -s logs-disabled
+            name: aws_common/logs-disabled
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/aws_common
+              - pipenv run molecule test -s logs-disabled
         - step:
-           name: bitbucket_config/default
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/bitbucket_config
-             - pipenv run molecule test -s default
+            name: bitbucket_config/default
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/bitbucket_config
+              - pipenv run molecule test -s default
         - step:
-           name: bitbucket_config/iam_elasticsearch
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/bitbucket_config
-             - pipenv run molecule test -s iam_elasticsearch
+            name: bitbucket_config/iam_elasticsearch
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/bitbucket_config
+              - pipenv run molecule test -s iam_elasticsearch
         - step:
-           name: confluence_config/aurora
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/confluence_config
-             - pipenv run molecule test -s aurora
+            name: confluence_config/aurora
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/confluence_config
+              - pipenv run molecule test -s aurora
         - step:
-           name: confluence_config/default
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/confluence_config
-             - pipenv run molecule test -s default
+            name: confluence_config/default
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/confluence_config
+              - pipenv run molecule test -s default
         - step:
-           name: confluence_config/password_char_escaping
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/confluence_config
-             - pipenv run molecule test -s password_char_escaping
+            name: confluence_config/password_char_escaping
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/confluence_config
+              - pipenv run molecule test -s password_char_escaping
         - step:
-           name: confluence_config/system_jdk
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/confluence_config
-             - pipenv run molecule test -s system_jdk
+            name: confluence_config/system_jdk
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/confluence_config
+              - pipenv run molecule test -s system_jdk
         - step:
-           name: diy_backup/default
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/diy_backup
-             - pipenv run molecule test -s default
+            name: diy_backup/default
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/diy_backup
+              - pipenv run molecule test -s default
         - step:
-           name: jira_config/aurora
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/jira_config
-             - pipenv run molecule test -s aurora
+            name: jira_config/aurora
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/jira_config
+              - pipenv run molecule test -s aurora
         - step:
-           name: jira_config/default
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/jira_config
-             - pipenv run molecule test -s default
+            name: jira_config/default
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/jira_config
+              - pipenv run molecule test -s default
         - step:
-           name: jira_config/jira_config_props
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/jira_config
-             - pipenv run molecule test -s jira_config_props
+            name: jira_config/jira_config_props
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/jira_config
+              - pipenv run molecule test -s jira_config_props
         - step:
-           name: jira_config/password_char_escaping
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/jira_config
-             - pipenv run molecule test -s password_char_escaping
+            name: jira_config/password_char_escaping
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/jira_config
+              - pipenv run molecule test -s password_char_escaping
         - step:
-           name: linux_common/default
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/linux_common
-             - pipenv run molecule test -s default
+            name: linux_common/default
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/linux_common
+              - pipenv run molecule test -s default
         - step:
-           name: product_common/default
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_common
-             - pipenv run molecule test -s default
+            name: product_common/default
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_common
+              - pipenv run molecule test -s default
         - step:
-           name: product_common/system_jdk
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_common
-             - pipenv run molecule test -s system_jdk
+            name: product_common/system_jdk
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_common
+              - pipenv run molecule test -s system_jdk
         - step:
-           name: product_install/bitbucket_latest
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_install
-             - pipenv run molecule test -s bitbucket_latest
+            name: product_install/bitbucket_latest
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_install
+              - pipenv run molecule test -s bitbucket_latest
         - step:
-           name: product_install/confluence_latest
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_install
-             - pipenv run molecule test -s confluence_latest
+            name: product_install/confluence_latest
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_install
+              - pipenv run molecule test -s confluence_latest
         - step:
             name: product_install/confluence_version_with_uppercase
+            caches:
+              - ansible-collections
+              - docker
+              - pip
             services:
               - docker
             script:
@@ -214,175 +296,252 @@ pipelines:
               - cd roles/product_install
               - pipenv run molecule test -s confluence_version_with_uppercase
         - step:
-           name: product_install/crowd_latest
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_install
-             - pipenv run molecule test -s crowd_latest
+            name: product_install/crowd_latest
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_install
+              - pipenv run molecule test -s crowd_latest
         - step:
-           name: product_install/default
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_install
-             - pipenv run molecule test -s default
+            name: product_install/default
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_install
+              - pipenv run molecule test -s default
         - step:
-           name: product_install/jira_all
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_install
-             - pipenv run molecule test -s jira_all
+            name: product_install/jira_all
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_install
+              - pipenv run molecule test -s jira_all
         - step:
-           name: product_install/jira_tarball_download_url
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_install
-             - pipenv run molecule test -s jira_tarball_download_url
+            name: product_install/jira_cached_with_downgrade
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_install
+              - pipenv run molecule test -s jira_cached_with_downgrade
         - step:
-           name: product_install/jira_cached_with_downgrade
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_install
-             - pipenv run molecule test -s jira_cached_with_downgrade
+            name: product_install/jira_cached_with_upgrade
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_install
+              - pipenv run molecule test -s jira_cached_with_upgrade
         - step:
-           name: product_install/jira_cached_with_upgrade
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_install
-             - pipenv run molecule test -s jira_cached_with_upgrade
+            name: product_install/jira_software_latest
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_install
+              - pipenv run molecule test -s jira_software_latest
         - step:
-           name: product_install/jira_software_latest
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_install
-             - pipenv run molecule test -s jira_software_latest
+            name: product_install/jira_tarball
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_install
+              - pipenv run molecule test -s jira_tarball
         - step:
-           name: product_install/jira_tarball
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_install
-             - pipenv run molecule test -s jira_tarball
+            name: product_install/jira_tarball_download_url
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_install
+              - pipenv run molecule test -s jira_tarball_download_url
         - step:
-           name: product_install/jira_version_from_file
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_install
-             - pipenv run molecule test -s jira_version_from_file
+            name: product_install/jira_version_from_file
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_install
+              - pipenv run molecule test -s jira_version_from_file
         - step:
-           name: product_install/jira_version_latest
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_install
-             - pipenv run molecule test -s jira_version_latest
+            name: product_install/jira_version_latest
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_install
+              - pipenv run molecule test -s jira_version_latest
         - step:
-           name: product_install/jira_version_override
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_install
-             - pipenv run molecule test -s jira_version_override
+            name: product_install/jira_version_override
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_install
+              - pipenv run molecule test -s jira_version_override
         - step:
-           name: product_install/servicedesk3
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_install
-             - pipenv run molecule test -s servicedesk3
+            name: product_install/servicedesk3
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_install
+              - pipenv run molecule test -s servicedesk3
         - step:
-           name: product_install/servicedesk4
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_install
-             - pipenv run molecule test -s servicedesk4
+            name: product_install/servicedesk4
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_install
+              - pipenv run molecule test -s servicedesk4
         - step:
-           name: product_install/servicedesk_latest
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_install
-             - pipenv run molecule test -s servicedesk_latest
+            name: product_install/servicedesk_latest
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_install
+              - pipenv run molecule test -s servicedesk_latest
         - step:
-           name: product_startup/bitbucket
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_startup
-             - pipenv run molecule test -s bitbucket
+            name: product_startup/bitbucket
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_startup
+              - pipenv run molecule test -s bitbucket
         - step:
-           name: product_startup/default
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_startup
-             - pipenv run molecule test -s default
+            name: product_startup/default
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_startup
+              - pipenv run molecule test -s default
         - step:
-           name: product_startup/startup_restart_false
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_startup
-             - pipenv run molecule test -s startup_restart_false
+            name: product_startup/startup_restart_false
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_startup
+              - pipenv run molecule test -s startup_restart_false
         - step:
-           name: product_startup/synchrony
-           services:
-             - docker
-           script:
-             - export ANSIBLE_CONFIG=./ansible.cfg
-             - ./bin/install-ansible --dev
-             - cd roles/product_startup
-             - pipenv run molecule test -s synchrony
+            name: product_startup/synchrony
+            caches:
+              - ansible-collections
+              - docker
+              - pip
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - cd roles/product_startup
+              - pipenv run molecule test -s synchrony
 
         - step:
-           name: Run Snyk security scan
-           services:
-             - docker
-           script:
-             - ./bin/install-ansible --dev
-             - apt-get update && apt-get install -y npm
-             - npm install -g snyk@1.455.0
-             - snyk auth $SNYK_TOKEN
-             - pipenv run snyk monitor --severity-threshold=high --project-name=dc-deployments-automation
+            name: Run Snyk security scan
+            caches:
+              - docker
+              - pip
+              - node
+            services:
+              - docker
+            script:
+              - export ANSIBLE_CONFIG=./ansible.cfg
+              - ./bin/install-ansible --dev
+              - apt-get update && apt-get install -y npm
+              - npm install -g snyk
+              - snyk auth $SNYK_TOKEN
+              - pipenv run snyk monitor --severity-threshold=high --project-name=dc-deployments-automation

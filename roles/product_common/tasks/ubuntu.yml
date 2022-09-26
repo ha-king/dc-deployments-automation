@@ -4,39 +4,39 @@
   block:
 
     - name: Install gnupg
-      apt:
+      ansible.builtin.apt:
         name: gnupg
         state: present
 
     - name: Add Adoptium debian repo public key
-      apt_key:
+      ansible.builtin.apt_key:
         url: https://packages.adoptium.net/artifactory/api/gpg/key/public
         state: present
 
     - name: Add Adoptium debian repository
-      apt_repository:
+      ansible.builtin.apt_repository:
         repo: "deb https://packages.adoptium.net/artifactory/deb {{ ansible_distribution_release }} main"
         state: present
         filename: adoptium
 
     - name: Install Eclipse Temurin JDK
-      apt:
+      ansible.builtin.apt:
         name: "temurin-{{ java_major_version }}-jdk"
         update_cache: yes
         state: present
 
     - name: Ensure common JDK symlink exists
-      alternatives:
+      community.general.alternatives:
         link: "/usr/lib/jvm/java"
         name: "java_sdk"
         path: "/usr/lib/jvm/temurin-{{ java_major_version }}-jdk-{{ debian_architecture }}"
         priority: 99
 
-  when: atl_use_system_jdk
+  when: atl_use_system_jdk | bool
   tags:
     - runtime_pkg
 
 - name: Install other base packages on Ubuntu
-  package:
+  ansible.builtin.package:
     name:
       - fonts-dejavu-core  # Required by installer

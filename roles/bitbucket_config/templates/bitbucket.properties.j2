@@ -13,7 +13,7 @@ hazelcast.network.aws.tag.value={{ atl_aws_stack_name }}
 hazelcast.group.name={{ atl_aws_stack_name }}
 hazelcast.group.password={{ atl_aws_stack_name }}
 plugin.search.elasticsearch.baseurl={{ atl_elasticsearch_endpoint }}
-{% if elasticsearch_should_auth_with_iam %}
+{% if elasticsearch_should_auth_with_iam | bool %}
 plugin.search.elasticsearch.aws.region={{ atl_aws_region }}
 {% else %}
 plugin.search.elasticsearch.username={{ atl_elasticsearch_username }}

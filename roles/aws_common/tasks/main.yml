@@ -1,31 +1,31 @@
 ---
 
 - name: Fetch local EC2 metadata
-  ec2_metadata_facts:
+  amazon.aws.ec2_metadata_facts:
   tags:
     - notest
 
 - name: Install distro-specific prerequisites
-  include_tasks: "{{ ansible_distribution|lower }}.yml"
+  ansible.builtin.include_tasks: "{{ ansible_distribution|lower }}.yml"
 
 - name: Use EC2 instance ID for cluster node ID
-  set_fact:
+  ansible.builtin.set_fact:
     atl_cluster_node_id: "{{ ansible_ec2_instance_id }}"
     atl_local_ipv4: "{{ ansible_ec2_local_ipv4 | default(ansible_default_ipv4.address) }}"
 
 - name: Generate CloudWatch config
-  template:
+  ansible.builtin.template:
     src: "amazon-cloudwatch-agent.json.j2"
     dest: "/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json"
     owner: root
     group: root
     mode: 0644
-  when: atl_aws_enable_cloudwatch is defined and atl_aws_enable_cloudwatch
+  when: atl_aws_enable_cloudwatch is defined and atl_aws_enable_cloudwatch | bool
   notify:
     - Restart CloudWatch Agent
 
 - name: Store some metadata about this run
-  include_tasks: "write-tags.yml"
+  ansible.builtin.include_tasks: "write-tags.yml"
 
 - name: Initiate the startup of any new AWS services now
-  meta: flush_handlers
+  ansible.builtin.meta: flush_handlers

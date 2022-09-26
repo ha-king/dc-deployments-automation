@@ -2,7 +2,7 @@
 
 
 - name: Check for existing version cache file
-  stat:
+  ansible.builtin.stat:
     path: "{{ atl_product_version_cache }}"
   register: cached
 
@@ -11,19 +11,19 @@
   block:
 
     - name: Read cached version from file
-      command: "cat {{ atl_product_version_cache }}"
+      ansible.builtin.command: "cat {{ atl_product_version_cache }}"
       register: atl_product_version_file
       changed_when: false
 
     - name: Set the local var to cached version
-      set_fact:
+      ansible.builtin.set_fact:
         atl_cached_version: "{{ atl_product_version_file.stdout }}"
 
   when: cached.stat.exists
 
 
 - name: Determine if requested version is 'latest'
-  set_fact:
+  ansible.builtin.set_fact:
     version_is_latest: "{{ atl_product_version is undefined or
                            not atl_product_version or
                            atl_product_version == 'latest' }}"
@@ -33,9 +33,9 @@
   block:
 
     - name: Fetch the latest edition version
-      include_tasks: "{{ atl_product_edition }}_version_latest.yml"
+      ansible.builtin.include_tasks: "{{ atl_product_edition }}_version_latest.yml"
 
-  when: not cached.stat.exists and version_is_latest
+  when: not cached.stat.exists and version_is_latest | bool
 
 
 ######################################################################
@@ -63,64 +63,63 @@
   block:
 
     - name: "Case: Cached version exists, has precedence over 'latest'"
-      set_fact:
+      ansible.builtin.set_fact:
         atl_download_version: "{{ atl_cached_version }}"
       when: cached.stat.exists
 
     - name: "Case: No cached version, use latest"
-      set_fact:
+      ansible.builtin.set_fact:
         atl_download_version: "{{ atl_latest_version }}"
       when: not cached.stat.exists
 
-  when: version_is_latest
+  when: version_is_latest | bool
 
 - name: "Case: Version is not latest"
   block:
     - name: "create atlassian z versioning for comparison"
-      set_fact:
+      ansible.builtin.set_fact:
         atl_z_product_version: "{{ atl_product_version ~ '-z' }}"
         atl_z_cached_version: "{{ atl_cached_version ~ '-z' }}"
 
     - name: "create atlassian ordered versioning for comparison"
-      set_fact:
+      ansible.builtin.set_fact:
         atl_product_normalised_version: "{{ atl_z_product_version | replace('-m', '-am') }}"
         atl_cached_normalised_version: "{{ atl_z_cached_version | replace('-m', '-am') }}"
 
     - name: "Case: No cached version, or supplied is higher; use supplied"
-      set_fact:
+      ansible.builtin.set_fact:
         atl_download_version: "{{ atl_product_version }}"
       when: force_version_update | bool or
             not cached.stat.exists or
             atl_product_normalised_version is version(atl_cached_normalised_version, '>')
 
     - name: "Case: Cached version is higher or forced, ignore supplied"
-      set_fact:
+      ansible.builtin.set_fact:
         atl_download_version: "{{ atl_cached_version }}"
       when: cached.stat.exists and
             atl_product_normalised_version is version(atl_cached_normalised_version, '<=') and
             not force_version_update | bool
 
-  when: not version_is_latest
+  when: not version_is_latest | bool
 
 
 - name: "Fallthrough guard: Use cached or supplied version if nothing set"
-  set_fact:
+  ansible.builtin.set_fact:
     atl_download_version: "{{ atl_cached_version or atl_product_version }}"
   when: atl_download_version is not defined or
-        atl_download_version|length == 0
+        atl_download_version | length == 0
 
 - name: Override the supplied version with the calculated one
-  set_fact:
+  ansible.builtin.set_fact:
     atl_product_version: "{{ atl_download_version }}"
 
 ######################################################################
 
 - name: Perform any additional per-edition version setup
-  include_tasks: "{{ atl_product_edition }}_extra_tasks.yml"
-
+  ansible.builtin.include_tasks: "{{ atl_product_edition }}_extra_tasks.yml"
 
 - name: Create installation directories
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     mode: 0750
@@ -136,7 +135,7 @@
 
 # At this point atl_product_version should be set, cache if necessary.
 - name: Write override cached version when specified
-  template:
+  ansible.builtin.template:
     src: version.j2
     dest: "{{ atl_product_version_cache }}"
     force: true
@@ -148,25 +147,25 @@
 # a directory is used as a lockfile (atomic operation) when moving binary.
 
 - name: Set assumptions to avoid race condition
-  set_fact:
+  ansible.builtin.set_fact:
     download_binary: true
     move_binary: false
     atl_product_download: "{{ atl_product_temp_download }}"
 
 # Check for pre-downloaded binary on shared_home and completed lock dir.
 - name: Check for completed lock directory
-  stat:
+  ansible.builtin.stat:
     path: "{{ atl_product_home_shared_completed_lock }}"
   register: completed_lock
 
 - name: Check for product installer in home_shared
-  stat:
+  ansible.builtin.stat:
     path: "{{ atl_product_home_shared_download }}"
   register: home_shared_download
 
 # If binary exists and lockdir exists use this binary instead
 - name: Check lock directory and binary exists on shared_home
-  set_fact:
+  ansible.builtin.set_fact:
     download_binary: false
     atl_product_download: "{{ atl_product_home_shared_download }}"
   when:
@@ -180,7 +179,7 @@
 
     # Fetch binary and copy to temp
     - name: Fetch binary
-      get_url:
+      ansible.builtin.get_url:
         url: "{{ atl_product_download_url }}"
         dest: "{{ atl_product_temp_download }}"
         mode: 0755
@@ -189,7 +188,7 @@
 
     # If product installer was fetched make the lock directory
     - name: Create moving_lock.
-      file:
+      ansible.builtin.file:
         path: "{{ atl_product_home_shared_moving_lock }}"
         state: directory
       when:
@@ -199,7 +198,7 @@
     # Directory lock was created by this run?
     # If so, then set a fact intending to move binary
     - name: Move binary Scenario - lock created by this run
-      set_fact:
+      ansible.builtin.set_fact:
         move_binary: true
       when:
         - moving_lock_created is succeeded
@@ -207,14 +206,14 @@
         # Otherwise directory lock was either already created or
         # could not be created. Fall back is to continue and install from temp
 
-  when: download_binary
+  when: download_binary | bool
 
 # If the intention is to move binary to home_shared
 - name: Move product installer to home_shared
   block:
 
     - name: Copy temp installer to home_shared
-      copy:
+      ansible.builtin.copy:
         src: "{{ atl_product_temp_download }}"
         dest: "{{ atl_product_home_shared_download }}"
         remote_src: true
@@ -224,14 +223,14 @@
       register: copied
 
     - name: Create completed_lock once product installer downloaded and copied
-      file:
+      ansible.builtin.file:
         path: "{{ atl_product_home_shared_completed_lock }}"
         state: directory
       when: copied is succeeded
       register: completed_lock_created
 
     - name: Remove moving_lock to show that binary is completed
-      file:
+      ansible.builtin.file:
         path: "{{ atl_product_home_shared_moving_lock }}"
         state: absent
       when:
@@ -240,33 +239,33 @@
       register: moving_lock_removed
 
     - name: Delete old temp installer
-      file:
+      ansible.builtin.file:
         path: "{{ atl_product_temp_download }}"
         state: absent
       when: moving_lock_removed is succeeded
       register: temp_deleted
 
     - name: Set install to home_shared location
-      set_fact:
+      ansible.builtin.set_fact:
         atl_product_download: "{{ atl_product_home_shared_download }}"
       when: temp_deleted is succeeded
 
-  when: move_binary
+  when: move_binary | bool
 
 # At this point the binary is in {{ atl_product_download }}
 # (which is either on home_shared or temp)
 - name: Unpack the downloaded application depending on format
-  include_tasks: "unpack_{{ atl_download_format }}.yml"
+  ansible.builtin.include_tasks: "unpack_{{ atl_download_format }}.yml"
 
 - name: Symlink the installed version to current
-  file:
+  ansible.builtin.file:
     src: "{{ atl_product_installation_versioned }}"
     dest: "{{ atl_product_installation_current }}"
     state: link
     force: true
 
 - name: "Ensure catalina.out log dir exists after product is installed (except bitbucket)"
-  file:
+  ansible.builtin.file:
     path: "{{ atl_product_installation_current }}/logs"
     state: directory
     mode: 0750
@@ -276,5 +275,5 @@
   changed_when: false  # For Molecule idempotence check
 
 - name: Include if jsd is requested to be installed from OBR
-  include_tasks: "jira-servicedesk_as_obr.yml"
-  when: atl_install_jsd_as_obr
+  ansible.builtin.include_tasks: "jira-servicedesk_as_obr.yml"
+  when: atl_install_jsd_as_obr | bool

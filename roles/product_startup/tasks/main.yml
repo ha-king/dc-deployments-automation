@@ -1,7 +1,7 @@
 ---
 
 - name: "Install systemd service file"
-  template:
+  ansible.builtin.template:
     src: "product.service.j2"
     dest: "{{ atl_systemd_service_dir }}/{{ atl_systemd_service_name }}"
     owner: root

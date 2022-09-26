@@ -38,7 +38,7 @@ atl_installer_temp: "{{ atl_installation_base }}/tmp"
 # installed and linked to `/usr/lib/jvm/java`.
 # See product_common/task/ubuntu.yml for an example of apropriate
 # linking using `alternatives`.
-atl_java_home: "{{ '/usr/lib/jvm/java' if atl_use_system_jdk else (atl_product_installation_current + '/jre') }}"
+atl_java_home: "{{ '/usr/lib/jvm/java' if atl_use_system_jdk | bool else (atl_product_installation_current + '/jre') }}"
 atl_java_binary: "{{ atl_java_home }}/bin/java"
 
 atl_product_logs_default: &logs_default
@@ -79,8 +79,8 @@ atl_aws_region: "{{ lookup('env', 'ATL_AWS_REGION') }}"
 atl_aws_iam_role: "{{ lookup('env', 'ATL_AWS_IAM_ROLE') }}"
 atl_aws_iam_role_arn: "{{ lookup('env', 'ATL_AWS_IAM_ROLE_ARN') }}"
 
-atl_aws_enable_cloudwatch: "{{ lookup('env', 'ATL_AWS_ENABLE_CLOUDWATCH')|bool or false }}"
-atl_aws_enable_cloudwatch_logs: "{{ lookup('env', 'ATL_AWS_ENABLE_CLOUDWATCH_LOGS')|bool or false }}"
+atl_aws_enable_cloudwatch: "{{ lookup('env', 'ATL_AWS_ENABLE_CLOUDWATCH') | bool or false }}"
+atl_aws_enable_cloudwatch_logs: "{{ lookup('env', 'ATL_AWS_ENABLE_CLOUDWATCH_LOGS') | bool or false }}"
 
 atl_db_engine: "{{ lookup('env', 'ATL_DB_ENGINE') }}"
 atl_db_host: "{{ lookup('env', 'ATL_DB_HOST') }}"
@@ -100,7 +100,7 @@ atl_db_timebetweenevictionrunsmillis: "{{ lookup('env', 'ATL_DB_TIMEBETWEENEVICT
 atl_db_minevictableidletimemillis: "{{ lookup('env', 'ATL_DB_MINEVICTABLEIDLETIMEMILLIS') or '5000' }}"
 atl_db_removeabandoned: "{{ lookup('env', 'ATL_DB_REMOVEABANDONED') or 'true' }}"
 atl_db_removeabandonedtimeout: "{{ lookup('env', 'ATL_DB_REMOVEABANDONEDTIMEOUT') or '300' }}"
-atl_db_testwhileidle: "{{ lookup('env', 'ATL_DB_TESTWHILEIDLE') or 'true'}}"
+atl_db_testwhileidle: "{{ lookup('env', 'ATL_DB_TESTWHILEIDLE') or 'true' }}"
 atl_db_testonborrow: "{{ lookup('env', 'ATL_DB_TESTONBORROW') or 'false' }}"
 atl_db_engine_to_db_type_map:
   aurora_postgres: "postgresaurora96"
@@ -116,7 +116,7 @@ atl_jdbc_ctype: "{{ lookup('env', 'ATL_JDBC_CTYPE') or 'en_US.UTF-8' }}"
 atl_jdbc_template: "{{ lookup('env', 'ATL_JDBC_TEMPLATE') or 'template1' }}"
 atl_jdbc_query_params_for_engine:
   aurora_postgres: "?targetServerType=master"
-atl_jdbc_url: "jdbc:postgresql://{{ atl_db_host }}:{{ atl_db_port }}/{{ atl_jdbc_db_name }}{{ atl_jdbc_query_params_for_engine[atl_db_engine]| default('') }}"
+atl_jdbc_url: "jdbc:postgresql://{{ atl_db_host }}:{{ atl_db_port }}/{{ atl_jdbc_db_name }}{{ atl_jdbc_query_params_for_engine[atl_db_engine] | default('') }}"
 
 atl_jvm_heap: "{{ lookup('env', 'ATL_JVM_HEAP') or '2048m' }}"
 atl_jvm_opts: "{{ lookup('env', 'ATL_JVM_OPTS') or '' }}"
