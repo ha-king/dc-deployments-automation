@@ -1,7 +1,7 @@
 ---
 
 - name: Restart Product
-  service:
+  ansible.builtin.service:
     name: "{{ atl_systemd_service_name }}"
     state: restarted
   when:
@@ -10,7 +10,7 @@
   no_log: true
 
 - name: Enable Product
-  service:
+  ansible.builtin.service:
     name: "{{ atl_systemd_service_name }}"
     enabled: true
   when:
