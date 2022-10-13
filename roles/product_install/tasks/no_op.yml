@@ -1,1 +1,7 @@
 ---
+- name: Symlink the the shared home
+  file:
+    src: "{{ atl_shared_mountpoint }}/{{ atl_product_edition }}/shared"
+    dest: "{{ atl_product_home }}/shared"
+    state: link
+    force: true

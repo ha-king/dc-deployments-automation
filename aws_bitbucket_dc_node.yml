@@ -8,8 +8,6 @@
     atl_product_edition: "bitbucket"
     atl_product_user: "bitbucket"
 
-    atl_product_home: "{{ atl_shared_mountpoint }}/{{ atl_product_edition }}"
-
     atl_use_system_jdk: true
     java_major_version: "11" # BB 8 will drop JDK 8 support
     atl_download_format: "tarball"
