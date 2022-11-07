@@ -36,7 +36,7 @@
     - { role: nfs_mount, when : (atl_fileserver_host is defined) and (atl_fileserver_host|length > 0) }
     - role: product_common
     - role: product_install
-    - role: database_init
+    - { role: database_init, tags: [database] }
     - role: bitbucket_config
     - role: product_startup
     - role: bitbucket_dataset_restore
