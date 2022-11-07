@@ -29,6 +29,9 @@
     atl_startup_exec_options:
       - "--no-search"
 
+    # Bitbucket DC Mirror nodes can set this to true to use the internal H2 database.
+    skip_database_init: false
+
   roles:
     - role: linux_common
     - role: aws_common
@@ -38,7 +41,7 @@
     - { role: nfs_mount, when: (atl_fileserver_host is defined) and (atl_fileserver_host|length > 0) }
     - role: product_common
     - role: product_install
-    - { role: database_init, when: (skip_database_init is not defined) or not (skip_database_init) }
+    - { role: database_init, when: not (skip_database_init | bool) }
     - role: bitbucket_config
     - role: product_startup
     - role: bitbucket_dataset_restore
