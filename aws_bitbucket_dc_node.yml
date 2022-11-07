@@ -8,6 +8,8 @@
     atl_product_edition: "bitbucket"
     atl_product_user: "bitbucket"
 
+    atl_product_home: "{{ atl_shared_mountpoint }}/{{ atl_product_edition }}"
+
     atl_use_system_jdk: true
     java_major_version: "11" # BB 8 will drop JDK 8 support
     atl_download_format: "tarball"
@@ -32,11 +34,11 @@
     - role: aws_common
     # For Bitbucket DC clusters that store repos on Bitbucket Mesh(https://confluence.atlassian.com/bitbucketserver/bitbucket-data-center-and-server-8-0-release-notes-1115659343.html#BitbucketDataCenterandServer8.0releasenotes-mesh),
     # nodes may be setup to use EFS instead of NFS for shared_home by not defining 'atl_fileserver_host'
-    - { role: aws_shared_fs_config, when: (atl_fileserver_host is not defined or atl_fileserver_host |length == 0) and (atl_efs_id|length > 0) }
-    - { role: nfs_mount, when : (atl_fileserver_host is defined) and (atl_fileserver_host|length > 0) }
+    - { role: aws_shared_fs_config, when: (atl_fileserver_host is not defined or atl_fileserver_host | length == 0) and (atl_efs_id | length > 0) }
+    - { role: nfs_mount, when: (atl_fileserver_host is defined) and (atl_fileserver_host|length > 0) }
     - role: product_common
     - role: product_install
-    - role: database_init
+    - { role: database_init, when: (skip_database_init is not defined) or not (skip_database_init) }
     - role: bitbucket_config
     - role: product_startup
     - role: bitbucket_dataset_restore
