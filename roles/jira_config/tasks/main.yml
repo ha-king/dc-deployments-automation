@@ -2,29 +2,29 @@
 
 
 - name: Create database config
-  template:
+  ansible.builtin.template:
     src: dbconfig.xml.j2
     dest: "{{ atl_product_home }}/dbconfig.xml"
     owner: "{{ atl_product_user }}"
 
 - name: Create cluster config
-  template:
+  ansible.builtin.template:
     src: cluster.properties.j2
     dest: "{{ atl_product_home }}/cluster.properties"
     owner: "{{ atl_product_user }}"
 
 - name: Create server config
-  template:
+  ansible.builtin.template:
     src: server.xml.j2
     dest: "{{ atl_product_installation_versioned }}/conf/server.xml"
 
 - name: Check for a jira-config.properties in the shared home
-  stat:
+  ansible.builtin.stat:
     path: "{{ atl_product_home_shared }}/jira-config.properties"
   register: jira_config_properties
 
 - name: Copy jira-config.properties if exists
-  copy:
+  ansible.builtin.copy:
     remote_src: true
     src: "{{ atl_product_home_shared }}/jira-config.properties"
     dest: "{{ atl_product_home }}/jira-config.properties"
@@ -35,7 +35,7 @@
 
 - name: Override JVM memory settings.
   # Ugly but necessary as the product installs this file so we need to make the change here.
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ atl_product_installation_versioned }}/bin/setenv.sh"
     backrefs: true
     regexp: "^{{ item }}="
@@ -45,25 +45,25 @@
     - 'JVM_MAXIMUM_MEMORY'
 
 - name: Set Jira home directory
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ atl_product_installation_versioned }}/bin/setenv.sh"
     regexp: "JIRA_HOME="
     line: 'JIRA_HOME="{{ atl_product_home }}"'
 
 - name: Set the Tomcat environment
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ atl_product_installation_versioned }}/bin/setenv.sh"
     insertafter: "EOF"
     line: 'export CATALINA_OPTS="${CATALINA_OPTS} {{ atl_catalina_opts }} {{ atl_catalina_opts_extra }}"'
 
 - name: Set support recommended JVM args
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "{{ atl_product_installation_versioned }}/bin/setenv.sh"
     regexp: "JVM_SUPPORT_RECOMMENDED_ARGS="
     line: 'JVM_SUPPORT_RECOMMENDED_ARGS="{{ atl_jvm_opts }}"'
 
 - name: Create application directories
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     mode: 0750
@@ -77,7 +77,7 @@
 
 
 - name: Limit permissions on the installation directory
-  file:
+  ansible.builtin.file:
     path: "{{ atl_product_installation_versioned }}"
     owner: "root"
     group: "root"
@@ -90,7 +90,7 @@
   changed_when: false  # For Molecule idempotence check
 
 - name: Grant access to the product working directories
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: directory
     mode: "u=rwX,g=rX,o-rwx"
@@ -104,7 +104,7 @@
   changed_when: false  # For Molecule idempotence check
 
 - name: Create conf/Catalina directory owned by product so catalina.out logging works
-  file:
+  ansible.builtin.file:
     path: "{{ atl_product_installation_versioned }}/conf/Catalina"
     state: directory
     mode: "u=rwX,g=rX,o-rwx"
@@ -113,7 +113,7 @@
   changed_when: false  # For Molecule idempotence check
 
 - name: Assert baseurl to same as atl_proxy_name
-  postgresql_query:
+  community.postgresql.postgresql_query:
     login_host: "{{ atl_db_host }}"
     login_user: "{{ atl_jdbc_user }}"
     login_password: "{{ atl_jdbc_password }}"

@@ -10,6 +10,7 @@
     <property name="confluence.database.choice">postgresql</property>
     <property name="confluence.database.connection.type">database-type-standard</property>
     <property name="hibernate.dialect">com.atlassian.confluence.impl.hibernate.dialect.PostgreSQLDialect</property>
+    <property name="struts.multipart.saveDir">${localHome}/temp</property>
     <property name="webwork.multipart.saveDir">${localHome}/temp</property>
     <property name="attachments.dir">${confluenceHome}/attachments</property>
 
@@ -38,7 +39,7 @@
     <property name="confluence.cluster.name">{{ atl_aws_stack_name }}</property>
     <property name="confluence.cluster.ttl">1</property>
     {% if atl_tomcat_contextpath is defined and atl_tomcat_contextpath != '' %}
-        <property name="confluence.webapp.context.path">/{{ atl_tomcat_contextpath }}</property>
+        <property name="confluence.webapp.context.path">{{ atl_tomcat_contextpath }}</property>
     {% endif %}
 
   </properties>

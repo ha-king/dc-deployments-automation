@@ -1,14 +1,14 @@
 ---
 
 - name: Install the startup wrapper script
-  copy:
+  ansible.builtin.copy:
     src: start-synchrony
     dest: "{{ atl_product_installation_current }}/bin/start-synchrony"
     group: "{{ atl_product_user }}"
     mode: "0750"
 
 - name: Install the Synchrony environment settings
-  template:
+  ansible.builtin.template:
     src: "atl.synchrony.j2"
     dest: "/etc/atl.synchrony"
     group: "{{ atl_product_user }}"

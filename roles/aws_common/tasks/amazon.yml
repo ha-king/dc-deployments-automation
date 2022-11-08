@@ -1,18 +1,22 @@
 ---
 
 - name: Install AWS support packages
-  yum:
+  ansible.builtin.yum:
     name:
       - amazon-efs-utils
       - amazon-ssm-agent
       - awscli
       - git
       - ec2-utils
+  vars:
+    ansible_python_interpreter: /usr/bin/python2
 
 - name: Install CloudWatch Agent
-  yum:
+  ansible.builtin.yum:
     name:
       - "{{ aws_cloudwatch_agent_rpm }}"
-  when: atl_aws_enable_cloudwatch is defined and atl_aws_enable_cloudwatch
+  when: atl_aws_enable_cloudwatch is defined and atl_aws_enable_cloudwatch | bool
   notify:
     - Enable CloudWatch Agent
+  vars:
+    ansible_python_interpreter: /usr/bin/python2

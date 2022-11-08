@@ -1,7 +1,7 @@
 ---
 
 - name: Create application DB user
-  postgresql_user:
+  community.postgresql.postgresql_user:
     login_host: "{{ atl_db_host }}"
     login_user: "{{ atl_db_root_user }}"
     login_password: "{{ atl_db_root_password }}"
@@ -11,7 +11,7 @@
     expires: 'infinity'
 
 - name: Collect dbcluster db_names
-  postgresql_query:
+  community.postgresql.postgresql_query:
     login_host: "{{ atl_db_host }}"
     login_user: "{{ atl_db_root_user }}"
     login_password: "{{ atl_db_root_password }}"
@@ -22,7 +22,7 @@
 - block:
 
     - name: Update root privs for new user
-      postgresql_privs:
+      community.postgresql.postgresql_privs:
         login_host: "{{ atl_db_host }}"
         login_user: "{{ atl_db_root_user }}"
         login_password: "{{ atl_db_root_password }}"
@@ -33,7 +33,7 @@
 
 # RDS does not allow changing the collation on an existing DB, it only allows collation change on creation of db. If the db already exists, we need the “create new application database” task to be skipped, idempotence can not be relied upon as we cant be certain the collation of the existing db
     - name: Create new application database
-      postgresql_db:
+      community.postgresql.postgresql_db:
         login_host: "{{ atl_db_host }}"
         login_user: "{{ atl_db_root_user }}"
         login_password: "{{ atl_db_root_password }}"
@@ -45,13 +45,13 @@
         lc_ctype: "{{ atl_jdbc_ctype }}"
         template: "{{ atl_jdbc_template }}"
       register: db_created
-      when: "atl_jdbc_db_name not in (dbcluster_db_names.query_result | map(attribute='datname') )"
+      when: "atl_jdbc_db_name not in (dbcluster_db_names.query_result | map(attribute='datname'))"
 
   tags:
     - new_only
 
 - name: Assert ownership of public schema
-  postgresql_query:
+  community.postgresql.postgresql_query:
     login_host: "{{ atl_db_host }}"
     login_user: "{{ atl_db_root_user }}"
     login_password: "{{ atl_db_root_password }}"
@@ -59,7 +59,7 @@
     query: "ALTER SCHEMA public OWNER to {{ atl_db_root_user }};"
 
 - name: Grant privs to root user on public schema
-  postgresql_query:
+  community.postgresql.postgresql_query:
     login_host: "{{ atl_db_host }}"
     login_user: "{{ atl_db_root_user }}"
     login_password: "{{ atl_db_root_password }}"
@@ -67,7 +67,7 @@
     query: "GRANT ALL ON SCHEMA public TO {{ atl_db_root_user }};"
 
 - name: Grant privs to application user on public schema
-  postgresql_query:
+  community.postgresql.postgresql_query:
     login_host: "{{ atl_db_host }}"
     login_user: "{{ atl_db_root_user }}"
     login_password: "{{ atl_db_root_password }}"

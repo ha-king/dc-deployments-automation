@@ -24,7 +24,7 @@ atl_stop_exec_path: "{{ atl_product_installation_current }}/{{ atl_stop_script_m
 atl_systemd_service_dir_map:
   amazon: "/usr/lib/systemd/system"
   ubuntu: "/lib/systemd/system"
-atl_systemd_service_dir: "{{ atl_systemd_service_dir_map[ansible_distribution|lower] }}"
+atl_systemd_service_dir: "{{ atl_systemd_service_dir_map[ansible_distribution | lower] }}"
 
 atl_systemd_service_name: "{{ atl_product_edition }}.service"
 

@@ -22,13 +22,10 @@
                acceptCount="{{ atl_tomcat_acceptcount }}"
                secure="{{ atl_tomcat_secure }}"
                scheme="{{ atl_tomcat_scheme }}"
-               {% if atl_proxy_name is defined and atl_proxy_name != '' %}
-                 proxyName="{{ atl_proxy_name }}"
-               {% endif %}
-               {% if atl_proxy_port is defined and atl_proxy_port != '' %}
-                 proxyPort="{{ atl_proxy_port }}"
-               {% endif %}
-
+               {% if atl_proxy_name is defined and atl_proxy_name != '' -%}proxyName="{{ atl_proxy_name }}"
+               {% endif -%}
+               {% if atl_proxy_port is defined and atl_proxy_port != '' -%}proxyPort="{{ atl_proxy_port }}"
+               {% endif -%}
                relaxedPathChars="[]|"
                relaxedQueryChars="[]|{}^\`&quot;&lt;&gt;"
                bindOnInit="false"
@@ -40,7 +37,6 @@
     <Connector port="{{ atl_tomcat_redirectport }}"
                protocol="{{ atl_tomcat_protocol }}"
                connectionTimeout="{{ atl_tomcat_connectiontimeout }}"
-
                relaxedPathChars="[]|"
                relaxedQueryChars="[]|{}^\`&quot;&lt;&gt;"
                maxHttpHeaderSize="65536"
@@ -50,6 +46,15 @@
                compressableMimeType="text/html,text/xml,text/plain,text/css,application/json,application/javascript,application/x-javascript" />
     {% endif %}
 
+    {% if atl_apptunnel_port is defined and atl_apptunnel_port != '' %}
+    <Connector port="{{ atl_apptunnel_port }}"
+               connectionTimeout="20000"
+               maxThreads="200"
+               minSpareThreads="10" 
+               enableLookups="false"
+               acceptCount="10"
+               URIEncoding="UTF-8"/>
+    {% endif %}
 
     <Engine name="Standalone"
             defaultHost="localhost"

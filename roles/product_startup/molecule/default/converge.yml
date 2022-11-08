@@ -10,7 +10,7 @@
 
   pre_tasks:
     - name: Create systemd dir if necessary
-      file:
+      ansible.builtin.file:
         path: "{{ item }}"
         state: directory
       with_items:
@@ -21,17 +21,17 @@
     - role: product_startup
 
   post_tasks:
-    - include_vars: ../../defaults/main.yml
+    - ansible.builtin.include_vars: ../../defaults/main.yml
 
     # workaround Molecule idempotence check
     # normal pattern of setting changed_when allows file to be written twice, which takes extra time
     - name: Check if vars have already been dumped
-      stat:
+      ansible.builtin.stat:
         path: "{{ ansible_vars_dump_location }}"
       register: ansible_vars_stat_result
 
     - name: Dump vars to file for inspection
-      copy:
+      ansible.builtin.copy:
         content: |
           {{ vars | to_nice_yaml }}
         dest: "{{ ansible_vars_dump_location }}"

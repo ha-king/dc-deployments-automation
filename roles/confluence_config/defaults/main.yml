@@ -33,7 +33,7 @@ atl_catalina_opts_extra: >-
   -Dsynchrony.proxy.enabled=false
   -Dconfluence.cluster.node.name={{ atl_local_ipv4 }}
   -Dconfluence.cluster.hazelcast.max.no.heartbeat.seconds=60
-  {% if atl_synchrony_service_url|string|length %}-Dsynchrony.service.url={{ atl_synchrony_service_url }}{% endif %}
+  {% if atl_synchrony_service_url | string | length %}-Dsynchrony.service.url={{ atl_synchrony_service_url }}{% endif %}
 
 atl_tomcat_port: "8080"
 atl_tomcat_mgmt_port: "8005"

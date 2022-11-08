@@ -38,7 +38,7 @@ def test_server_file(host):
     assert f.exists
     assert f.contains('Connector port="8080"')
     assert f.contains('Server port="8005"')
-    assert f.contains('<Context path="foo"')
+    assert f.contains('<Context path="/foo"')
     assert f.contains('maxThreads="200"')
     assert f.contains('minSpareThreads="10"')
     assert f.contains('connectionTimeout="20000"')

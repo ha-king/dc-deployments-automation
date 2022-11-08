@@ -1,4 +1,4 @@
 ---
 
 dependencies:
-  - bitbucket_common
+  - role: bitbucket_common

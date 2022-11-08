@@ -1,16 +1,18 @@
 ---
 
 - name: Install Amazon-Linux-specific support packages
-  yum:
+  ansible.builtin.yum:
     name:
       - dejavu-sans-fonts
       - file
       - git-{{ git_version }}
       - libxml2
       - shadow-utils
+  vars:
+    ansible_python_interpreter: /usr/bin/python2
 
 - name: Limit the SSH ciphers
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: "/etc/ssh/sshd_config"
     # Drop insecure ciphers, currently 3des-cbc only. You can get the
     # full list with `sshd -T | grep -i ciphers`

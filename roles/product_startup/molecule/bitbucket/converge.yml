@@ -27,7 +27,7 @@
 
   pre_tasks:
     - name: Create systemd dir if necessary
-      file:
+      ansible.builtin.file:
         path: "{{ item }}"
         state: directory
       with_items:

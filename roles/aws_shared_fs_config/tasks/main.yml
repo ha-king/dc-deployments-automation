@@ -1,13 +1,13 @@
 ---
 
 - name: Create mountpoint
-  file:
+  ansible.builtin.file:
     state: directory
     path: "{{ atl_shared_mountpoint }}"
     mode: 0755
 
 - name: Enable mountpoint in fstab
-  mount:
+  ansible.posix.mount:
     path: "{{ atl_shared_mountpoint }}"
     src: "{{ efs_target }}:{{ efs_src_dir }}"
     fstype: "{{ efs_type }}"

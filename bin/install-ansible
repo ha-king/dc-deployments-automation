@@ -4,13 +4,13 @@ set -e
 
 source /etc/os-release
 if [[ $ID = "amzn" ]]; then
+    amazon-linux-extras enable python3.8
+    yum clean metadata
     yum install -y \
-        python3-devel \
-        python3-pip \
-        python2-boto3 \
-        python2-botocore \
-        python-lxml
-
+        python2-pip \
+        python38 \
+        python38-pip \
+        python38-devel
 else
     # FIXME: Currently assumes Debian-based
     apt-get update && \
@@ -32,4 +32,8 @@ if [[ $1 == "--dev" ]]; then
 fi
 
 echo "Installing collections from galaxy..."
-pipenv run ansible-galaxy collection install -v -r requirements.yml
+galaxy_retry_count=0
+until [[ $galaxy_retry_count -gt 2 ]]; do
+  pipenv run ansible-galaxy collection install --upgrade --verbose --requirements-file requirements.yml && break
+  galaxy_retry_count=$((galaxy_retry_count + 1))
+done

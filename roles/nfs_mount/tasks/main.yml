@@ -1,7 +1,7 @@
 ---
 
 - name: Create mountpoint
-  file:
+  ansible.builtin.file:
     state: directory
     path: "{{ atl_shared_mountpoint }}"
     mode: 0755
@@ -9,7 +9,7 @@
     group: "{{ atl_product_user }}"
 
 - name: Enable mountpoint in fstab
-  mount:
+  ansible.posix.mount:
     src: "{{ atl_fileserver_host }}:{{ atl_nfs_target }}"
     path: "{{ atl_nfs_mountpoint }}"
     fstype: nfs

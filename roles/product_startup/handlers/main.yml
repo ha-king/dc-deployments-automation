@@ -1,19 +1,19 @@
 ---
 
 - name: Restart Product
-  service:
+  ansible.builtin.service:
     name: "{{ atl_systemd_service_name }}"
     state: restarted
   when:
-    - atl_startup_restart
+    - atl_startup_restart | bool
     - molecule_yml is not defined
   no_log: true
 
 - name: Enable Product
-  service:
+  ansible.builtin.service:
     name: "{{ atl_systemd_service_name }}"
     enabled: true
   when:
-    - atl_startup_enable
+    - atl_startup_enable | bool
     - molecule_yml is not defined
   no_log: true

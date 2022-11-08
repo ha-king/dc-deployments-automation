@@ -1,13 +1,13 @@
 ---
 
 - name: Install Google Noto fonts for language coverage
-  package:
+  ansible.builtin.package:
     name:
       - "fonts-noto"
 
 - name: Link the language fonts into the JDK
   # Not idiomatic, but cleaner than messing with nested lookups...
-  shell:
+  ansible.builtin.shell:
     cmd: "ln -sf /usr/share/fonts/truetype/noto/* {{ item }}/"
     creates: "{{ item }}/NotoSansJavanese-Regular.ttf"
     warn: false

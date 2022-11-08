@@ -20,12 +20,12 @@
 
   pre_tasks:
     - name: Create base dir
-      file:
+      ansible.builtin.file:
         path: '/opt/atlassian/bin'
         state: directory
 
     - name: Install git
-      package:
+      ansible.builtin.package:
         name: git
 
   roles:

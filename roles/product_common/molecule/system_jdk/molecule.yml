@@ -1,6 +1,4 @@
 ---
-dependency:
-  name: galaxy
 driver:
   name: docker
 platforms:
@@ -10,5 +8,7 @@ platforms:
     image: ubuntu:bionic
 provisioner:
   name: ansible
+  env:
+    ANSIBLE_COLLECTIONS_PATH: "../../"
 verifier:
   name: testinfra

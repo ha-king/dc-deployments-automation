@@ -1,9 +1,8 @@
 ---
 
 - name: Install common Ubuntu support packages
-  apt:
+  ansible.builtin.apt:
     name:
-      - python3-psycopg2
       - libxml2-utils
       - git
       - fontconfig

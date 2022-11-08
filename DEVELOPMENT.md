@@ -1,8 +1,9 @@
 ## Prerequisites
 
 You should have the following software installed:
-* Python; 3.x by preference, but 2.7 works.
- * You may also need the Python development packages depending on how it’s installed.
+* Python; 3.8 or newer
+  * You may also need the Python development packages depending on how it’s installed
+  * Note that the runtime still requires Python 2 for certain tasks on Amazon Linux 2, but is not necessary for local development
 * Python Virtualenv
 * Docker
 * Cloudtoken
@@ -17,23 +18,26 @@ All other requirements will be installed under Virtualenv.
 
 ### Step 1.2: Install development environment dependencies
 
-To ensure compatibility we specify a specific Ansible version; currently 2.7.11
-(some older versions had issues with RDS). We do this with
-[Pipenv](https://docs.pipenv.org/) to lock the dependency tree. There are 2 main
-ways to do this; either directly if packaged, or via pip...
+To ensure compatibility we specify a specific Ansible version; currently
+ansible-core 2.13.x. We do this with [Pipenv](https://docs.pipenv.org/) to lock
+the dependency tree. There are 2 main ways to do this; either directly if
+packaged, or via pip...
 
-    # Ubuntu 19.04+, Debian 10+
-    sudo apt-get install pipenv python-dev
+    # Ubuntu 22.04+, Debian 11+
+    sudo apt-get install python3-dev python3-pip
 
-    # Older versions & RHEL/Amazon Linux, etc.
-    sudo apt-get install -y python-pip python-dev
-    # Or...
-    sudo yum install -y python-pip python-dev
-
-    pip install pipenv
+    # Amazon Linux 2
+    sudo amazon-linux-extras enable python3.8
+    sudo yum install python38 python38-pip python38-devel python-lxml
 
     # Mac via Homebrew
-    brew install pipenv
+    brew install libpq openssl@3 python@X.x  # (where "X.x") is 3.8 or newer
+    export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+    export LDFLAGS="-L/opt/homebrew/opt/openssl@3/lib"
+    export CPPFLAGS="-I/opt/homebrew/opt/openssl@3/include"
+
+    # Finally
+    pip3 install pipenv
 
 ### Step 1.3: Enter the development environment
 
@@ -44,11 +48,21 @@ development environment:
     pipenv sync --dev
     pipenv shell --dev
 
-### Step 1.4: Run some tests against a role
+### Step 1.4: Install Ansible collections
 
-[Molecule](https://molecule.readthedocs.io/en/stable/) is a testing framework for Ansible. We use this to test the
-functionality of individual and groups of roles, and to ensure cross-platform
-compatibility (currently Amazon Linux 2 and Ubuntu LTS).
+To save a little time during deployment, we rely directly on ansible-core and a
+custom set of collections as opposed to installing the community edition. To that
+end, when testing locally, you'll need these collections installed where Ansible
+expects them to be; that path is configured ansible.cfg and used automatically
+when collections are installed via `ansible-galaxy`:
+
+    ansible-galaxy collection install --upgrade --verbose --requirements-file requirements.yml
+
+### Step 1.5: Run some tests against a role
+
+[Molecule](https://molecule.readthedocs.io/en/stable/) is a testing framework for
+Ansible. We use this to test the functionality of individual and groups of roles,
+and to ensure cross-platform compatibility (currently Amazon Linux 2 and Ubuntu LTS).
 
 We’re going to check that the role that downloads the products works for both
 Jira Core and Confluence, on boths supported Linux distributions. So run the

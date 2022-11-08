@@ -1,7 +1,7 @@
 ---
 
 - name: Unpack the product packages
-  unarchive:
+  ansible.builtin.unarchive:
     remote_src: true
     src: "{{ atl_product_download }}"
     dest: "{{ atl_product_installation_versioned }}"

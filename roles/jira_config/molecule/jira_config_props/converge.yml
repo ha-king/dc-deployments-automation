@@ -30,11 +30,11 @@
 
   pre_tasks:
     - name: Create shared home
-      file:
+      ansible.builtin.file:
         path: '/media/atl/jira/shared/'
         state: directory
     - name: Create jira-config.properties to check copy
-      copy:
+      ansible.builtin.copy:
         dest: '/media/atl/jira/shared/jira-config.properties'
         content: "jira.projectkey.warning = testwarning"
         force: false  # For idempotency check

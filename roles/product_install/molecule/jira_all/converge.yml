@@ -16,11 +16,11 @@
     atl_jdbc_template: 'template0'
   pre_tasks:
     - name: Create cache dir
-      file:
+      ansible.builtin.file:
         path: '/media/atl/jira/shared/'
         state: directory
     - name: Seed version
-      copy:
+      ansible.builtin.copy:
         dest: '/media/atl/jira/shared/jira-core.version'
         content: "8.14.0"
         force: false  # For idempotency check

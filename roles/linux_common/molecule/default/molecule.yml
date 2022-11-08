@@ -1,6 +1,4 @@
 ---
-dependency:
-  name: galaxy
 driver:
   name: docker
 platforms:
@@ -14,6 +12,8 @@ platforms:
       - aws_node_local
 provisioner:
   name: ansible
+  env:
+    ANSIBLE_COLLECTIONS_PATH: "../../"
   inventory:
     links:
       group_vars: ../../../../group_vars/
