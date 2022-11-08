@@ -12,9 +12,11 @@
     java_major_version: "11" # BB 8 will drop JDK 8 support
     atl_download_format: "tarball"
 
+    atl_product_home: "/var/atlassian/application-data/bitbucket"
     atl_nfs_mountpoint: "{{ atl_shared_mountpoint }}/bitbucket/shared"
     atl_nfs_target: "{{ atl_shared_mountpoint }}/bitbucket/shared"
     atl_nfs_version: "3"
+
 
     atl_startup_systemd_params:
       - "UMask=0027"
