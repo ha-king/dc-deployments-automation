@@ -13,3 +13,4 @@
     dest: "{{ atl_product_home }}/shared"
     state: link
     force: true
+  when: not skip_shared_home_symlink | bool

@@ -41,3 +41,4 @@ atl_source_obr_from_marketplace: true
 atl_servicedesk_download_file: "{{ atl_installer_temp }}/jira-servicedesk.{{ atl_product_version }}.obr"
 
 force_version_update: false
+skip_shared_home_symlink: false
