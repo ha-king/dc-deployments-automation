@@ -1,1 +1,16 @@
 ---
+- name: Create the product local home directory
+  ansible.builtin.file:
+    path: "{{ atl_product_home }}/shared"
+    state: directory
+    owner: "{{ atl_product_user }}"
+    group: "{{ atl_product_user }}"
+    mode: "0754"
+
+- name: Symlink the the shared home
+  ansible.builtin.file:
+    src: "{{ atl_shared_mountpoint }}/{{ atl_product_edition }}/shared"
+    dest: "{{ atl_product_home }}/shared"
+    state: link
+    force: true
+  when: not skip_shared_home_symlink | bool
