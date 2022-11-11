@@ -1,5 +1,6 @@
 ---
 
+atl_bitbucket_display_name: "{{ lookup('env', 'ATL_BITBUCKET_DISPLAY_NAME') or 'Bitbucket' }}"
 atl_bitbucket_license_key: "{{ lookup('env', 'ATL_BB_LICENSEKEY') }}"
 atl_bitbucket_properties_raw: "{{ lookup('env', 'ATL_BITBUCKET_PROPERTIES') }}"
 atl_bitbucket_properties: "{{ atl_bitbucket_properties_raw.split(' ') | reject('equalto', '') | list }}"
