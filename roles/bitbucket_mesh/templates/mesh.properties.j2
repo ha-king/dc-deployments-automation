@@ -1,0 +1,10 @@
+# Listen for gRPC requests on all interfaces by default. This allows connecting to the node remotely
+grpc.server.address=0.0.0.0
+
+authentication.token={{ ansible_hostname | hash('md5') }}
+node.name={{ ansible_hostname }}
+node.id={{ ansible_hostname }}
+
+jmx.enabled={{ mesh_jmx_enabled | default(false) }}
+management.metrics.export.jmx.domain={{ mesh_jmx_export_domain | default("") }}
+metrics.tags.host={{ ansible_hostname }}

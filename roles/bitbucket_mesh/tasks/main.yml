@@ -1,0 +1,73 @@
+---
+
+- name: Create Bitbucket dirs if necessary
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: "{{ atl_product_user_uid }}"
+    group: "{{ atl_product_user_uid }}"
+    mode: 0750
+    state: directory
+    recurse: yes
+  with_items:
+    - "{{ atl_home_base }}/{{ atl_product_edition }}"
+    - "{{ atl_home_base }}/{{ atl_product_user }}"
+    - "{{ mesh_install_dir }}"
+
+- name: download the mesh distribution using maven
+  community.general.maven_artifact:
+    group_id: "com.atlassian.bitbucket.mesh"
+    artifact_id: "mesh-distribution"
+    extension: "tar.gz"
+    version: "{{ atl_product_version }}"
+    repository_url: "{{ bitbucket_mesh_maven_repo }}"
+    dest: "{{ mesh_install_dir }}"
+    keep_name: yes
+    mode: "0644"
+    owner: "{{ atl_product_user_uid }}"
+    group: "{{ atl_product_user_uid }}"
+  register: maven_download
+
+- name: extract the downloaded artifact
+  ansible.builtin.unarchive:
+    src: "{{ maven_download.dest }}"
+    dest: "/opt/atlassian/mesh/"
+    creates: "/opt/atlassian/mesh/atlassian-bitbucket-mesh-{{ atl_product_version }}"
+    mode: 0755
+    owner: "{{ atl_product_user }}"
+    group: "{{ atl_product_user }}"
+  register: mesh_extract
+  when:
+    - maven_download.changed | bool
+
+# the owner/group on the unarchive above isn't thorough
+- name: adjust permissions on the extracted directory
+  ansible.builtin.file:
+    state: directory
+    path: "/opt/atlassian/mesh/atlassian-bitbucket-mesh-{{ atl_product_version }}"
+    owner: "{{ atl_product_user }}"
+    group: "{{ atl_product_user }}"
+    recurse: yes
+
+- name: symlink to the current version
+  ansible.builtin.file:
+    src: "/opt/atlassian/mesh/atlassian-bitbucket-mesh-{{ atl_product_version }}"
+    dest: "/opt/atlassian/mesh/current"
+    state: link
+  when:
+    - mesh_extract.changed | bool
+
+- name: touch the jmx password file
+  ansible.builtin.file:
+    path: "{{ atl_home_base }}/{{ atl_product_edition }}/jmx.access"
+    state: touch
+    owner: "{{ atl_product_user_uid }}"
+    group: "{{ atl_product_user_uid }}"
+    mode: 0600
+
+# - name: template out mesh.properties
+#   ansible.builtin.template:
+#     src: mesh.properties.j2
+#     dest: "{{ atl_home_base }}/{{ atl_product_edition }}/mesh.properties"
+#     owner: "{{ atl_product_user }}"
+#     group: "{{ atl_product_user }}"
+#     mode: 0600

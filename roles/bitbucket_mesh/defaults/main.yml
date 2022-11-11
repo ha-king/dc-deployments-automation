@@ -1,0 +1,3 @@
+mesh_install_dir: /opt/atlassian/mesh
+bitbucket_mesh_maven_repo: https://packages.atlassian.com/maven-external
+bitbucket_mesh_version: "1.3.1"
