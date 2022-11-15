@@ -16,7 +16,7 @@
     atl_nfs_mountpoint: "{{ atl_shared_mountpoint }}/bitbucket/shared"
     atl_nfs_target: "{{ atl_shared_mountpoint }}/bitbucket/shared"
     atl_nfs_version: "3"
-
+    bitbucket_cluster_node_name: "{{ ansible_default_ipv4.address | default('')}}"
 
     atl_startup_systemd_params:
       - "UMask=0027"
@@ -25,7 +25,7 @@
       - "Environment=JAVA_HOME=/usr/lib/jvm/java"
       - "Environment=JVM_MAXIMUM_MEMORY={{ atl_jvm_heap }}"
       - "Environment=JVM_MINIMUM_MEMORY={{ atl_jvm_heap }}"
-      - "Environment=JVM_SUPPORT_RECOMMENDED_ARGS={{ atl_jvm_opts }}"
+      - "Environment=JVM_SUPPORT_RECOMMENDED_ARGS={{ atl_jvm_opts }} -Dcluster.node.name={{ bitbucket_cluster_node_name }}"
     atl_startup_exec_options:
       - "--no-search"
 
