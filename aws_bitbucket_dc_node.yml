@@ -25,7 +25,7 @@
       - "Environment=JAVA_HOME=/usr/lib/jvm/java"
       - "Environment=JVM_MAXIMUM_MEMORY={{ atl_jvm_heap }}"
       - "Environment=JVM_MINIMUM_MEMORY={{ atl_jvm_heap }}"
-      - "Environment=JVM_SUPPORT_RECOMMENDED_ARGS={{ atl_jvm_opts }} -Dcluster.node.name={{ bitbucket_cluster_node_name }}"
+      - "Environment=JVM_SUPPORT_RECOMMENDED_ARGS=-Dcluster.node.name={{ bitbucket_cluster_node_name }} {{ atl_jvm_opts }}"
     atl_startup_exec_options:
       - "--no-search"
 
