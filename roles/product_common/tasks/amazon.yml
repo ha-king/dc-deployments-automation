@@ -1,6 +1,6 @@
 ---
 
-- name: install jdk via tzg if atl_jdk_tgz set
+- name: install jdk via tzg if atl_jdk_tgz_url set
   block:
     - name: ensure /usr/lib/jvm exists
       ansible.builtin.file:
@@ -10,7 +10,7 @@
 
     - name: fetch jdk via tgz to /tmp
       ansible.builtin.get_url:
-        url: "{{ atl_jdk_tgz }}"
+        url: "{{ atl_jdk_tgz_url }}"
         dest: "/tmp/"
         mode: 0755
         force: true
@@ -44,7 +44,7 @@
         path: "{{ atl_tgz_unpacked.files[0].path }}"
         priority: 99
 
-  when: atl_jdk_tgz
+  when: atl_jdk_tgz_url
 
 - name: Add Adoptium repo and install Eclipse Temurin JDK if necessary on Amazon Linux
   block:
@@ -75,7 +75,7 @@
 
   when: 
     - atl_use_system_jdk | bool
-    - not atl_jdk_tgz
+    - not atl_jdk_tgz_url
   tags:
     - runtime_pkg
 
