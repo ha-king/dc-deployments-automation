@@ -42,6 +42,13 @@
         link: "/usr/lib/jvm/java"
         name: "java_sdk"
         path: "{{ atl_tgz_unpacked.files[0].path }}"
+        priority: 98
+
+    - name: Ensure common JAVA symlink exists
+      community.general.alternatives:
+        link: "/bin/java"
+        name: "java"
+        path: "/usr/lib/jvm/java/bin/java"
         priority: 99
 
   when: atl_jdk_tgz_url
