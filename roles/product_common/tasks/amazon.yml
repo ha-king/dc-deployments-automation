@@ -1,5 +1,51 @@
 ---
 
+- name: install jdk via tzg if atl_jdk_tgz set
+  block:
+    - name: ensure /usr/lib/jvm exists
+      ansible.builtin.file:
+        path: "/usr/lib/jvm"
+        state: directory
+        mode: '0755'
+
+    - name: fetch jdk via tgz to /tmp
+      ansible.builtin.get_url:
+        url: "{{ atl_jdk_tgz }}"
+        dest: "/tmp/"
+        mode: 0755
+        force: true
+        timeout: 600
+      register: atl_tgz_completed
+
+    - name: Unpack the product packages to like /usr/lib/jvm/jdk-something
+      ansible.builtin.unarchive:
+        remote_src: true
+        src: "/tmp/{{ atl_jdk_tgz | basename }}"
+        dest: "/usr/lib/jvm"
+        owner: "root"
+        group: "root"
+        mode: 0755
+        # extra_opts:
+        #   creates: "/usr/lib/jvm/jdk-something"
+
+    - name: Find /var/log all directories, exclude nginx and mysql
+      ansible.builtin.find:
+        paths: "/usr/lib/jvm"
+        patterns: 'jdk*'
+        recurse: no
+        file_type: directory
+      register: atl_tgz_unpacked
+
+
+    - name: Ensure common JDK symlink exists
+      community.general.alternatives:
+        link: "/usr/lib/jvm/java"
+        name: "java_sdk"
+        path: "{{ atl_tgz_unpacked.files[0].path }}"
+        priority: 99
+
+  when: atl_jdk_tgz
+
 - name: Add Adoptium repo and install Eclipse Temurin JDK if necessary on Amazon Linux
   block:
 
@@ -27,7 +73,9 @@
         path: "/usr/lib/jvm/temurin-{{ java_major_version }}-jdk"
         priority: 99
 
-  when: atl_use_system_jdk | bool
+  when: 
+    - atl_use_system_jdk | bool
+    - not atl_jdk_tgz
   tags:
     - runtime_pkg
 
