@@ -7,8 +7,6 @@
     atl_product_user: "bitbucket"
     atl_product_version: "6.3.1"
 
-    atl_product_home: "{{ atl_shared_mountpoint }}/{{ atl_product_edition }}"
-
     atl_jdbc_user: 'bb_db_user'
     atl_jdbc_password: 'molecule_password'
 

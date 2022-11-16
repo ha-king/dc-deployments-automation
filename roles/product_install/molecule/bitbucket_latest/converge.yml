@@ -6,7 +6,6 @@
     atl_product_edition: "bitbucket"
     atl_product_user: "bitbucket"
 
-    atl_product_home: "{{ atl_shared_mountpoint }}/{{ atl_product_edition }}"
   roles:
     - role: linux_common
     - role: product_common
