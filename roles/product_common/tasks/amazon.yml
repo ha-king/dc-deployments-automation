@@ -20,7 +20,7 @@
     - name: Unpack the product packages to like /usr/lib/jvm/jdk-something
       ansible.builtin.unarchive:
         remote_src: true
-        src: "/tmp/{{ atl_jdk_tgz | basename }}"
+        src: "/tmp/{{ atl_jdk_tgz_url | basename }}"
         dest: "/usr/lib/jvm"
         owner: "root"
         group: "root"
