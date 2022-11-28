@@ -10,12 +10,14 @@
 
     - name: Add Adoptium debian repo public key
       ansible.builtin.apt_key:
-        url: https://packages.adoptium.net/artifactory/api/gpg/key/public
+#        url: https://packages.adoptium.net/artifactory/api/gpg/key/public
+        url: https://packages.atlassian.com/artifactory/adoptium/api/gpg/key/public
         state: present
 
     - name: Add Adoptium debian repository
       ansible.builtin.apt_repository:
-        repo: "deb https://packages.adoptium.net/artifactory/deb {{ ansible_distribution_release }} main"
+        #repo: "deb https://packages.adoptium.net/artifactory/deb {{ ansible_distribution_release }} main"
+        repo: "deb https://packages.atlassian.com/artifactory/adoptium/deb {{ ansible_distribution_release }} main"
         state: present
         filename: adoptium
 
