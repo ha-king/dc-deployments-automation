@@ -1,6 +1,6 @@
 ---
 
-- name: Add Adoptium repo and install Eclipse Temurin JDK if necessary on Amazon Linux
+- name: Add Adoptium repo and install Eclipse Temurin JDK if necessary on Amazon Linux 2022
   block:
 
     - name: Add Adoptium yum repository
@@ -17,8 +17,6 @@
       ansible.builtin.yum:
         name: "temurin-{{ java_major_version }}-jdk"
         state: present
-      vars:
-        ansible_python_interpreter: /usr/bin/python2
 
     - name: Ensure common JDK symlink exists
       community.general.alternatives:
@@ -31,9 +29,7 @@
   tags:
     - runtime_pkg
 
-- name: Install other base packages on Amazon Linux
-  ansible.builtin.yum:
+- name: Install other base packages on Amazon Linux 2022
+  ansible.builtin.dnf:
     name:
       - dejavu-fonts-common  # Required by the installer
-  vars:
-    ansible_python_interpreter: /usr/bin/python2

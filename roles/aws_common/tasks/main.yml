@@ -6,7 +6,7 @@
     - notest
 
 - name: Install distro-specific prerequisites
-  ansible.builtin.include_tasks: "{{ ansible_distribution|lower }}.yml"
+  ansible.builtin.include_tasks: "{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml"
 
 - name: Use EC2 instance ID for cluster node ID
   ansible.builtin.set_fact:

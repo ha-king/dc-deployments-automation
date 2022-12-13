@@ -3,7 +3,7 @@
 set -e
 
 source /etc/os-release
-if [[ $ID = "amzn" ]]; then
+if [[ $ID = "amzn" ]] && [[ $VERSION = "2" ]]; then
     amazon-linux-extras enable python3.8
     yum clean metadata
     yum install -y \
@@ -11,6 +11,11 @@ if [[ $ID = "amzn" ]]; then
         python38 \
         python38-pip \
         python38-devel
+elif [[ $ID = "amzn" ]] && [[ $VERSION = "2022" ]]; then
+    dnf install -y \
+        python3 \
+        python3-pip \
+        python3-devel
 else
     # FIXME: Currently assumes Debian-based
     apt-get update && \

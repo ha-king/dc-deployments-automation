@@ -1,6 +1,6 @@
 ---
 
-- name: Install Amazon-Linux-specific support packages
+- name: Install Amazon-Linux-2-specific support packages
   ansible.builtin.yum:
     name:
       - dejavu-sans-fonts

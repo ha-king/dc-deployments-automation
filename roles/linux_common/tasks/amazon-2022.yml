@@ -1,0 +1,10 @@
+---
+
+- name: Install Amazon-Linux-2022-specific support packages
+  ansible.builtin.dnf:
+    name:
+      - dejavu-sans-fonts
+      - file
+      - git-{{ git_version }}
+      - libxml2
+      - shadow-utils

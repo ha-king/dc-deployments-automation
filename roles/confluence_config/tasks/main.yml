@@ -130,4 +130,4 @@
   with_items: "{{ atl_fonts_fallback_dirs }}"
 
 - name: Install & configure distro language fonts
-  ansible.builtin.include_tasks: "{{ ansible_distribution|lower }}_fonts.yml"
+  ansible.builtin.include_tasks: "{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}_fonts.yml"
