@@ -5,6 +5,6 @@
     name:
       - dejavu-sans-fonts
       - file
-      - git-{{ git_version }}
+      - git
       - libxml2
       - shadow-utils
