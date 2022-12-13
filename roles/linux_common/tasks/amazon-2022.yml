@@ -8,3 +8,9 @@
       - git
       - libxml2
       - shadow-utils
+
+- name: Uninstall curl-minimal (conflicts with curl)
+  ansible.builtin.dnf:
+    name: curl-minimal
+    state: absent
+    autoremove: no

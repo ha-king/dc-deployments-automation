@@ -3,12 +3,14 @@
 - name: Add Adoptium repo and install Eclipse Temurin JDK if necessary on Amazon Linux 2022
   block:
 
+    # There is no amazonlinux/2022 package available from the Adoptium repo; AL2022 docs point to upstream compatiblity
+    # with Fedora 34, 35, and 36, so we use the latest of those for the Temurin package for now
     - name: Add Adoptium yum repository
       ansible.builtin.yum_repository:
         name: Adoptium
         file: adoptium
         description: Adoptium Repo
-        baseurl: "https://packages.adoptium.net/artifactory/rpm/amazonlinux/{{ ansible_distribution_version }}/{{ ansible_architecture }}"
+        baseurl: "https://packages.adoptium.net/artifactory/rpm/fedora/36/{{ ansible_architecture }}"
         gpgkey: https://packages.adoptium.net/artifactory/api/gpg/key/public
         gpgcheck: yes
         state: present
@@ -32,4 +34,4 @@
 - name: Install other base packages on Amazon Linux 2022
   ansible.builtin.dnf:
     name:
-      - dejavu-fonts-common  # Required by the installer
+      - dejavu-fonts-all  # Required by the installer
