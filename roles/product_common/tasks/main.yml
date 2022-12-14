@@ -1,4 +1,9 @@
 ---
 
-- name: Perform distro-specific tasks
+- name: Perform Amazon-Linux-specific tasks
   ansible.builtin.include_tasks: "{{ ansible_distribution | lower }}-{{ ansible_distribution_version }}.yml"
+  when: ansible_distribution | lower == 'amazon'
+
+- name: Perform Ubuntu/Debian-specific tasks
+  ansible.builtin.include_tasks: "{{ ansible_distribution | lower }}.yml"
+  when: ansible_distribution | lower != 'amazon'
