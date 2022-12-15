@@ -6,6 +6,10 @@ platforms:
     image: amazonlinux:2
     groups:
       - aws_node_local
+  - name: amazon_linux2022
+    image: amazonlinux:2022
+    groups:
+      - aws_node_local
 # - name: ubuntu_lts
 #   image: ubuntu:bionic
 provisioner:

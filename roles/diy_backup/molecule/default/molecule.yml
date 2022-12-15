@@ -8,6 +8,12 @@ platforms:
       - aws_node_local
     ulimits:
       - nofile:262144:262144
+  - name: amazon_linux2022
+    image: amazonlinux:2022
+    groups:
+      - aws_node_local
+    ulimits:
+      - nofile:262144:262144
   - name: ubuntu_lts
     image: ubuntu:bionic
     groups:
