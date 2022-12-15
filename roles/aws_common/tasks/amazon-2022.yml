@@ -9,10 +9,17 @@
       - git
       - ec2-utils
 
+# https://github.com/amazonlinux/amazon-linux-2022/issues/164
+- name: Ensure group "aoc" exists
+  ansible.builtin.group:
+    name: aoc
+    state: present
+  when: atl_aws_enable_cloudwatch is defined and atl_aws_enable_cloudwatch | bool
+
 - name: Install CloudWatch Agent
   ansible.builtin.dnf:
     name:
-      - "{{ aws_cloudwatch_agent_rpm }}"
+      - amazon-cloudwatch-agent
   when: atl_aws_enable_cloudwatch is defined and atl_aws_enable_cloudwatch | bool
   notify:
     - Enable CloudWatch Agent
