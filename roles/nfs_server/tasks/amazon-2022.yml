@@ -5,7 +5,7 @@
     name:
       - nfs-utils
 
-- name: Create nfs.service symlink to nfs-service.service
+- name: Create nfs.service symlink to nfs-server.service
   ansible.builtin.file:
     src: /usr/lib/systemd/system/nfs-server.service
     dest: /usr/lib/systemd/system/nfs.service
