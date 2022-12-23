@@ -24,14 +24,14 @@ def test_version_file_is_latest(host):
     verfile = host.file('/media/atl/confluence/shared-home/confluence.version')
     assert verfile.exists
 
-    upstream_fd = urllib.request.urlopen("https://marketplace.atlassian.com/rest/2/products/key/confluence/versions")
+    upstream_fd = urllib.request.urlopen("https://marketplace-admin.internal.atlassian.com/rest/2/products/key/confluence/versions")
     upstream_json = json.load(upstream_fd)
     upstream = upstream_json['_embedded']['versions'][0]['name']
 
     assert verfile.content.decode("UTF-8").strip() == upstream.strip()
 
 def test_latest_is_downloaded(host):
-    upstream_fd = urllib.request.urlopen("https://marketplace.atlassian.com/rest/2/products/key/confluence/versions")
+    upstream_fd = urllib.request.urlopen("https://marketplace-admin.internal.atlassian.com/rest/2/products/key/confluence/versions")
     upstream_json = json.load(upstream_fd)
     upstream = upstream_json['_embedded']['versions'][0]['name']
 
@@ -40,7 +40,7 @@ def test_latest_is_downloaded(host):
     assert installer.user == 'root'
 
 def test_completed_lockfile(host):
-    upstream_fd = urllib.request.urlopen("https://marketplace.atlassian.com/rest/2/products/key/confluence/versions")
+    upstream_fd = urllib.request.urlopen("https://marketplace-admin.internal.atlassian.com/rest/2/products/key/confluence/versions")
     upstream_json = json.load(upstream_fd)
     upstream = upstream_json['_embedded']['versions'][0]['name']
 

@@ -7,7 +7,7 @@ atl_cached_version: ''
 #  with values for both password and username
 atl_download_secret_name: ''
 
-atl_product_latest_version_url: "https://marketplace.atlassian.com/rest/2/products/key/{{ atl_product_family }}/versions"
+atl_product_latest_version_url: "https://marketplace-admin.internal.atlassian.com/rest/2/products/key/{{ atl_product_family }}/versions"
 atl_product_version_cache_dir: "{{ atl_product_home_shared }}"
 atl_product_version_cache: "{{ atl_product_home_shared }}/{{ atl_product_edition }}.version"
 
@@ -30,10 +30,10 @@ atl_product_home_shared_download: "{{ atl_product_home_shared_download_dir }}/{{
 atl_product_home_shared_moving_lock: "{{ atl_product_home_shared_download }}_moving"
 atl_product_home_shared_completed_lock: "{{ atl_product_home_shared_download }}_completed"
 
-atl_marketplace_base: "https://marketplace.atlassian.com"
-atl_mpac_products: "https://marketplace.atlassian.com/rest/2/products"
-atl_servicedesk_latest_url: "https://marketplace.atlassian.com/rest/2/products/key/jira-servicedesk/versions/latest"
-atl_servicedesk_versioned_url: "https://marketplace.atlassian.com/rest/2/products/key/jira-servicedesk/versions/name/{{ atl_product_version }}"
+atl_marketplace_base: "https://marketplace-admin.internal.atlassian.com/"
+atl_mpac_products: "https://marketplace-admin.internal.atlassian.com/rest/2/products"
+atl_servicedesk_latest_url: "https://marketplace-admin.internal.atlassian.com/rest/2/products/key/jira-servicedesk/versions/latest"
+atl_servicedesk_versioned_url: "https://marketplace-admin.internal.atlassian.com/rest/2/products/key/jira-servicedesk/versions/name/{{ atl_product_version }}"
 atl_servicedesk_url_map:
   latest: "{{ atl_servicedesk_latest_url }}"
   default: "{{ atl_servicedesk_versioned_url }}"

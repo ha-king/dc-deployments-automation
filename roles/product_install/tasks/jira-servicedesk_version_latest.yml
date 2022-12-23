@@ -2,7 +2,7 @@
 
 - name: Fetch the latest version from URL
   ansible.builtin.set_fact:
-    atl_product_version_json: "{{ lookup('url', 'https://marketplace.atlassian.com/rest/2/products/key/jira-servicedesk/versions') }}"
+    atl_product_version_json: "{{ lookup('url', 'https://marketplace-admin.internal.atlassian.com/rest/2/products/key/jira-servicedesk/versions') }}"
 
 - name: Set the local var to retrieved version
   ansible.builtin.set_fact:

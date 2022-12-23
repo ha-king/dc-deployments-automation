@@ -8,7 +8,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
     os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('all')
 
 def get_latest():
-    data = urllib.request.urlopen("https://marketplace.atlassian.com/rest/2/products/key/jira-servicedesk/versions/latest")
+    data = urllib.request.urlopen("https://marketplace-admin.internal.atlassian.com/rest/2/products/key/jira-servicedesk/versions/latest")
     meta = json.loads(data.read().decode("UTF-8"))
     servicedesk = meta['name']
     jira = meta['compatibilities'][0]['hosting']['server']['max']['version']
