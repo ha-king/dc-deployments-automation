@@ -10,6 +10,6 @@ def test_config_file(host):
     f = host.file('/media/atl/bitbucket/shared/bitbucket.properties')
     assert f.exists
 
-    assert not f.contains("plugin.search.elasticsearch.username")
-    assert not f.contains("plugin.search.elasticsearch.password")
-    assert f.contains("plugin.search.elasticsearch.aws.region=us-east-2")
+    assert not f.contains("plugin.search.config.username")
+    assert not f.contains("plugin.search.config.password")
+    assert f.contains("plugin.search.config.aws.region=us-east-2")
