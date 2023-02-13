@@ -12,12 +12,12 @@ hazelcast.network.aws.region={{ atl_aws_region }}
 hazelcast.network.aws.tag.value={{ atl_aws_stack_name }}
 hazelcast.group.name={{ atl_aws_stack_name }}
 hazelcast.group.password={{ atl_aws_stack_name }}
-plugin.search.elasticsearch.baseurl={{ atl_elasticsearch_endpoint }}
+plugin.search.config.baseurl={{ atl_elasticsearch_endpoint }}
 {% if elasticsearch_should_auth_with_iam | bool %}
-plugin.search.elasticsearch.aws.region={{ atl_aws_region }}
+plugin.search.config.aws.region={{ atl_aws_region }}
 {% else %}
-plugin.search.elasticsearch.username={{ atl_elasticsearch_username }}
-plugin.search.elasticsearch.password={{ atl_elasticsearch_password }}
+plugin.search.config.username={{ atl_elasticsearch_username }}
+plugin.search.config.password={{ atl_elasticsearch_password }}
 {% endif %}
 setup.displayName=Bitbucket
 setup.baseUrl = {{ atl_bitbucket_baseurl }}
