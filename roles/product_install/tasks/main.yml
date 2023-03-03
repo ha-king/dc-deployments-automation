@@ -177,6 +177,9 @@
 - name: download_binary is true so fetch and do all the things
   block:
 
+    - ansible.builtin.debug:
+        msg: "atl_download_secret_name is {{ atl_download_secret_name }}"
+
     # optionally grab basic_auth creds from secrets_manager secret called 'download_atlassian'
     - name: set basic_auth facts if the secret exists
       ansible.builtin.set_fact:
@@ -190,6 +193,9 @@
         - atl_download_secret_name is defined
       tags:
         - runtime_pkg
+
+    - ansible.builtin.debug:
+        msg: "download_atlassian_username is {{ download_atlassian_username }} AND download_atlassian_password is {{ download_atlassian_password }}"
 
     # Fetch binary and copy to temp 
     # optionally use basic_auth creds from secrets_manager
