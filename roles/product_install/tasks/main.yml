@@ -187,7 +187,6 @@
         download_atlassian_username: "{{ lookup('amazon.aws.aws_secret', atl_download_secret_name + '.username', region=ansible_ec2_placement_region, bypath=false, nested=true, on_denied='skip', on_missing='skip') }}"
       failed_when: false
       ignore_errors: yes
-      no_log: true
       when: 
         - ansible_ec2_placement_region is defined
         - atl_download_secret_name is defined
