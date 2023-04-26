@@ -1,7 +1,7 @@
 ---
 - name: Create the product local home directory
   ansible.builtin.file:
-    path: "{{ atl_product_home }}/shared"
+    path: "{{ atl_product_home }}"
     state: directory
     owner: "{{ atl_product_user }}"
     group: "{{ atl_product_user }}"
