@@ -1,9 +1,9 @@
 ---
 
-- name: Add Adoptium repo and install Eclipse Temurin JDK if necessary on Amazon Linux 2022
+- name: Add Adoptium repo and install Eclipse Temurin JDK if necessary on Amazon Linux 2023
   block:
 
-    # There is no amazonlinux/2022 package available from the Adoptium repo; AL2022 docs point to upstream compatiblity
+    # There is no amazonlinux/2023 package available from the Adoptium repo; AL2023 docs point to upstream compatiblity
     # with Fedora 34, 35, and 36, so we use the latest of those for the Temurin package for now
     - name: Add Adoptium yum repository
       ansible.builtin.yum_repository:
@@ -31,7 +31,7 @@
   tags:
     - runtime_pkg
 
-- name: Install other base packages on Amazon Linux 2022
+- name: Install other base packages on Amazon Linux 2023
   ansible.builtin.dnf:
     name:
       - dejavu-fonts-all  # Required by the installer

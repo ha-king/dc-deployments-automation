@@ -9,7 +9,7 @@
       - git
       - ec2-utils
 
-# https://github.com/amazonlinux/amazon-linux-2022/issues/164
+# https://github.com/amazonlinux/amazon-linux-2023/issues/164
 - name: Ensure group "aoc" exists
   ansible.builtin.group:
     name: aoc

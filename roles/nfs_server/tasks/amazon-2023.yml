@@ -1,6 +1,6 @@
 ---
 
-- name: Install Amazon-Linux-2022-specific NFS packages
+- name: Install Amazon-Linux-2023-specific NFS packages
   ansible.builtin.dnf:
     name:
       - nfs-utils

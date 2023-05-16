@@ -1,6 +1,6 @@
 ---
 
-- name: Install Amazon-Linux-2022-specific support packages
+- name: Install Amazon-Linux-2023-specific support packages
   ansible.builtin.dnf:
     name:
       - dejavu-sans-fonts
