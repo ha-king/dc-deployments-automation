@@ -2,6 +2,8 @@
 
 set -e
 
+PIP_BIN="pip3"
+
 source /etc/os-release
 if [[ $ID = "amzn" ]] && [[ $VERSION = "2" ]]; then
     amazon-linux-extras enable python3.8
@@ -13,9 +15,10 @@ if [[ $ID = "amzn" ]] && [[ $VERSION = "2" ]]; then
         python38-devel
 elif [[ $ID = "amzn" ]] && [[ $VERSION = "2023" ]]; then
     dnf install -y \
-        python3 \
-        python3-pip \
-        python3-devel
+        python3.11 \
+        python3.11-pip \
+        python3.11-devel
+    PIP_BIN="pip3.11"
 else
     # FIXME: Currently assumes Debian-based
     apt-get update && \
@@ -27,7 +30,7 @@ export PATH=/usr/local/bin:$PATH
 export PIP_DEFAULT_TIMEOUT=60
 
 echo "Installing pipenv..."
-pip3 install pipenv
+$PIP_BIN install pipenv
 
 echo "Installing ansible and dependencies..."
 PIPENV_NOSPIN=1 PIPENV_HIDE_EMOJIS=1 pipenv sync 2>&1 | iconv -c -f utf-8 -t ascii
