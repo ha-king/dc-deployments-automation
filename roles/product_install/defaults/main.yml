@@ -19,7 +19,8 @@ atl_download_suffix: "{{ atl_download_format_suffix_map[atl_download_format] }}"
 
 atl_release_base_url: "https://product-downloads.atlassian.com/software"
 atl_product_base_url: "{{ atl_release_base_url }}/{{ atl_product_family }}/downloads"
-atl_product_download_url: "{{ atl_product_base_url }}/atlassian-{{ atl_download_edition | default(atl_product_edition) }}-{{ atl_product_version }}{{ atl_download_suffix }}"
+atl_product_download_default_url: "{{ atl_product_base_url }}/atlassian-{{ atl_download_edition | default(atl_product_edition) }}-{{ atl_product_version }}{{ atl_download_suffix }}"
+atl_product_download_url: "{{ lookup('env', 'ATL_PRODUCT_DOWNLOAD_URL') or atl_product_download_default_url }}"
 
 atl_product_download_filename: "{{ atl_download_edition | default(atl_product_edition) }}.{{ atl_product_version }}{{ atl_download_suffix }}"
 atl_product_temp_download: "{{ atl_installer_temp }}/{{ atl_product_download_filename }}"
