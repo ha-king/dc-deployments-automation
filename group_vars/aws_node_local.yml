@@ -107,6 +107,8 @@ atl_db_engine_to_db_type_map:
   rds_postgres: "postgres72"
 atl_db_type: "{{ atl_db_engine_to_db_type_map[atl_db_engine] | default('postgres72') }}"
 
+atl_download_secret_name: "{{ lookup('env', 'ATL_DOWNLOAD_SECRET_NAME') or '' }}"
+
 atl_jdbc_db_name: "{{ lookup('env', 'ATL_JDBC_DB_NAME') }}"
 atl_jdbc_user: "{{ lookup('env', 'ATL_JDBC_USER') }}"
 atl_jdbc_password: "{{ lookup('env', 'ATL_JDBC_PASSWORD') }}"
