@@ -1,0 +1,15 @@
+---
+
+- name: Install Google Noto fonts for language coverage
+  ansible.builtin.dnf:
+    name:
+      - "google-noto-*"
+
+- name: Link the language fonts into the JDK
+  # Not idiomatic, but cleaner than messing with nested lookups...
+  ansible.builtin.shell:
+    cmd: "ln -sf /usr/share/fonts/google-noto*/* {{ item }}/"
+    creates: "{{ item }}/NotoSansJavanese-Regular.ttf"
+    warn: false
+  with_items: "{{ atl_fonts_fallback_dirs }}"
+  changed_when: false  # For Molecule idempotence check

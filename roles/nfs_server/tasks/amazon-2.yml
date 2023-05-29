@@ -1,6 +1,6 @@
 ---
 
-- name: Install Amazon-Linux-specific NFS packages
+- name: Install Amazon-Linux-2-specific NFS packages
   ansible.builtin.yum:
     name:
       - nfs-utils

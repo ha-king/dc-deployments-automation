@@ -1,14 +1,16 @@
 ---
 
-- name: Add Adoptium repo and install Eclipse Temurin JDK if necessary on Amazon Linux
+- name: Add Adoptium repo and install Eclipse Temurin JDK if necessary on Amazon Linux 2023
   block:
 
+    # There is no amazonlinux/2023 package available from the Adoptium repo; AL2023 docs point to upstream compatiblity
+    # with Fedora 34, 35, and 36, so we use the latest of those for the Temurin package for now
     - name: Add Adoptium yum repository
       ansible.builtin.yum_repository:
         name: Adoptium
         file: adoptium
         description: Adoptium Repo
-        baseurl: "https://packages.adoptium.net/artifactory/rpm/amazonlinux/{{ ansible_distribution_version }}/{{ ansible_architecture }}"
+        baseurl: "https://packages.adoptium.net/artifactory/rpm/fedora/36/{{ ansible_architecture }}"
         gpgkey: https://packages.adoptium.net/artifactory/api/gpg/key/public
         gpgcheck: yes
         state: present
@@ -17,8 +19,6 @@
       ansible.builtin.yum:
         name: "temurin-{{ java_major_version }}-jdk"
         state: present
-      vars:
-        ansible_python_interpreter: /usr/bin/python2
 
     - name: Ensure common JDK symlink exists
       community.general.alternatives:
@@ -31,9 +31,7 @@
   tags:
     - runtime_pkg
 
-- name: Install other base packages on Amazon Linux
-  ansible.builtin.yum:
+- name: Install other base packages on Amazon Linux 2023
+  ansible.builtin.dnf:
     name:
-      - dejavu-fonts-common  # Required by the installer
-  vars:
-    ansible_python_interpreter: /usr/bin/python2
+      - dejavu-fonts-all  # Required by the installer

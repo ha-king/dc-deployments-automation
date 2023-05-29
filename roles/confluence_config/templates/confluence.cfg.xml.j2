@@ -18,6 +18,9 @@
     <property name="hibernate.connection.url">{{ atl_jdbc_url }}</property>
     <property name="hibernate.connection.username">{{ atl_jdbc_user }}</property>
     <property name="hibernate.connection.password">{{ atl_jdbc_password | replace("&", "&amp;") }}</property>
+
+    {# Confluence versions 7.13 and newer #}
+    {% if (atl_product_version.split(".")[0] | int() == 7 and atl_product_version.split(".")[1] | int() <= 13) or atl_product_version.split(".")[0] | int() < 7 %}
     <property name="hibernate.c3p0.min_size">{{ atl_db_poolminsize }}</property>
     <property name="hibernate.c3p0.max_size">{{ atl_db_poolmaxsize }}</property>
     <property name="hibernate.c3p0.timeout">{{ atl_db_timeout }}</property>
@@ -26,6 +29,12 @@
     <property name="hibernate.c3p0.validate">{{ atl_db_validate }}</property>
     <property name="hibernate.c3p0.acquire_increment">{{ atl_db_acquireincrement }}</property>
     <property name="hibernate.c3p0.preferredTestQuery">{{ atl_db_preferredtestquery }}</property>
+    {% else %}
+    <property name="hibernate.hikari.idleTimeout">{{ atl_db_timeout }}</property>
+    <property name="hibernate.hikari.maximumPoolSize">{{ atl_db_poolmaxsize }}</property>
+    <property name="hibernate.hikari.minimumIdle">{{ atl_db_poolminsize }}</property>
+    <property name="hibernate.hikari.registerMbeans">true</property>
+    {% endif %}
 
     <property name="shared-home">{{ atl_product_home_shared }}</property>
     <property name="confluence.cluster">true</property>

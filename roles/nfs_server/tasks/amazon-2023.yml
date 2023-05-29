@@ -1,0 +1,14 @@
+---
+
+- name: Install Amazon-Linux-2023-specific NFS packages
+  ansible.builtin.dnf:
+    name:
+      - nfs-utils
+
+- name: Create nfs.service symlink to nfs-server.service
+  ansible.builtin.file:
+    src: /usr/lib/systemd/system/nfs-server.service
+    dest: /usr/lib/systemd/system/nfs.service
+    owner: root
+    group: root
+    state: link

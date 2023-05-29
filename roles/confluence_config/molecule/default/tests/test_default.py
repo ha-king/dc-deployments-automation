@@ -78,7 +78,7 @@ def test_confluence_config_file(host):
     assert f.contains('<property name="confluence.cluster.aws.host.header">ec2.amazonaws.com</property>')
     assert f.contains('<property name="hibernate.connection.url">jdbc:postgresql://postgres-db.ap-southeast-2.rds.amazonaws.com:5432/confluence</property>')
     assert f.contains('<property name="hibernate.connection.password">molecule_password</property>')
-    assert f.contains('<property name="hibernate.c3p0.preferredTestQuery">select 1;</property>')
+    assert (f.contains('<property name="hibernate.c3p0.preferredTestQuery">select 1;</property>') or f.contains('<property name="hibernate.hikari.registerMbeans">true</property>'))
     assert f.contains('<property name="confluence.webapp.context.path">/foo</property>')
     assert f.contains('<property name="confluence.cluster.aws.tag.key">my-cluster-tag</property>')
 
