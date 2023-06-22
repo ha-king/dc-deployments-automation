@@ -16,6 +16,7 @@
     atl_elasticsearch_password: password
 
     atl_bitbucket_properties_raw: "key1=val1 key2=val2    key3=val3"
+    skip_shared_home_symlink: true
 
   roles:
     - role: linux_common

@@ -1,6 +1,4 @@
 ---
-
-
 - name: Check for existing version cache file
   ansible.builtin.stat:
     path: "{{ atl_product_version_cache }}"
