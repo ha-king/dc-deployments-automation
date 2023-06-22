@@ -13,7 +13,7 @@
     atl_jdbc_password: 'molecule_password'
 
     atl_aws_region: us-east-2
-
+    skip_shared_home_symlink: true
   roles:
     - role: linux_common
     - role: product_common

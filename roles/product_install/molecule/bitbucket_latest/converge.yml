@@ -7,6 +7,7 @@
     atl_product_user: "bitbucket"
 
     atl_product_home: "{{ atl_shared_mountpoint }}/{{ atl_product_edition }}"
+    skip_shared_home_symlink: true
   roles:
     - role: linux_common
     - role: product_common
