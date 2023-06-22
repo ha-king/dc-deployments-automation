@@ -6,6 +6,7 @@
     owner: "{{ atl_product_user }}"
     group: "{{ atl_product_user }}"
     mode: "0754"
+  changed_when: false  # For Molecule idempotence check
 
 - name: Symlink the the shared home
   ansible.builtin.file:
