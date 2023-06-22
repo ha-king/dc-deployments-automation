@@ -7,6 +7,10 @@
     group: "{{ atl_product_user }}"
     mode: 0750
     state: directory
+  register: create_shared_home_dir
+  failed_when:
+    - create_shared_home_dir.rc != 0
+    - "'already exists as a link' not in create_shared_home_dir.msg"
 
 - name: Create Bitbucket config file
   ansible.builtin.template:
