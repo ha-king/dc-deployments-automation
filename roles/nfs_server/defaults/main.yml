@@ -3,3 +3,4 @@
 atl_nfs_server_device: "{{ lookup('env', 'ATL_NFS_SERVER_DEVICE') }}"
 atl_nfs_fs_type: "{{ lookup('env', 'ATL_NFS_FS_TYPE') or 'xfs' }}"
 atl_nfs_fs_label: "{{ lookup('env', 'ATL_NFS_FS_LABEL') or 'BB-Shared' }}"
+atl_nfs_service_name: "nfs.service"

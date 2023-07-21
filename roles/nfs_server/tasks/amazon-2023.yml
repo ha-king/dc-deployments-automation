@@ -5,10 +5,6 @@
     name:
       - nfs-utils
 
-- name: Create nfs.service symlink to nfs-server.service
-  ansible.builtin.file:
-    src: /usr/lib/systemd/system/nfs-server.service
-    dest: /usr/lib/systemd/system/nfs.service
-    owner: root
-    group: root
-    state: link
+- name: set nfs service name to nfs-server.service
+  ansible.builtin.set_fact:
+    atl_nfs_service_name: "nfs-server.service"
