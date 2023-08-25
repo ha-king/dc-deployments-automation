@@ -7,7 +7,7 @@
     group: "{{ atl_product_user_uid }}"
     mode: 0750
     state: directory
-    recurse: yes
+    recurse: no
   with_items:
     - "{{ atl_home_base }}/{{ atl_product_edition }}"
     - "{{ atl_home_base }}/{{ atl_product_user }}"
