@@ -13,6 +13,17 @@
         gpgcheck: yes
         state: present
 
+    - name: Add Alternate Adoptium yum repository
+      ansible.builtin.yum_repository:
+        name: alternate-adoptium
+        file: alternate-adoptium
+        description: Alternate Adoptium Repo
+        baseurl: "https://packages.atlassian.com/artifactory/adoptium-rpm/amazonlinux/{{ ansible_distribution_version }}/{{ ansible_architecture }}"
+        gpgkey: https://packages.atlassian.com/artifactory/adoptium-rpm/amazonlinux/{{ ansible_distribution_version }}/{{ ansible_architecture }}/repodata/repomd.xml
+        gpgcheck: true
+        state: present
+      ignore_errors: true
+
     - name: Install Eclipse Temurin JDK
       ansible.builtin.yum:
         name: "temurin-{{ java_major_version }}-jdk"
