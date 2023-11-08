@@ -57,6 +57,11 @@
     {% if atl_tomcat_contextpath is defined and atl_tomcat_contextpath != '' %}
         <property name="confluence.webapp.context.path">{{ atl_tomcat_contextpath }}</property>
     {% endif %}
-
+    {# Confluence versions 7.13 and newer #}
+    {% if atl_opensearch_endpoint is defined and atl_opensearch_endpoint != '' %}
+    <property name="opensearch.aws.region">{{ atl_hazelcast_network_aws_iam_region }}</property>
+    <property name="opensearch.http.url">{{ atl_opensearch_endpoint }}</property>
+    <property name="search.platform">opensearch</property>
+    {% endif %}
   </properties>
 </confluence-configuration>
