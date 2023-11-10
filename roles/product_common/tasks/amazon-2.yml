@@ -8,8 +8,12 @@
         name: Adoptium
         file: adoptium
         description: Adoptium Repo
-        baseurl: "https://packages.adoptium.net/artifactory/rpm/amazonlinux/{{ ansible_distribution_version }}/{{ ansible_architecture }}"
-        gpgkey: https://packages.adoptium.net/artifactory/api/gpg/key/public
+        baseurl:
+          - "https://packages.adoptium.net/artifactory/rpm/amazonlinux/{{ ansible_distribution_version }}/{{ ansible_architecture }}"
+          - "https://packages.atlassian.com/artifactory/adoptium-rpm/amazonlinux/2/x86_64"
+        gpgkey:
+          - https://packages.adoptium.net/artifactory/api/gpg/key/public
+          - https://packages.atlassian.com/artifactory/adoptium-rpm/amazonlinux/2/x86_64/repodata/repomd.xml.key
         gpgcheck: yes
         state: present
 
