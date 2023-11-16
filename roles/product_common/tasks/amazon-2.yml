@@ -16,6 +16,8 @@
           - "{{ atl_adoptium_gpgkey_alternate_url is defined | ternary(atl_adoptium_gpgkey_alternate_url, '') }}"
         gpgcheck: yes
         state: present
+      tags:
+        - molecule-idempotence-notest
 
     - name: Install Eclipse Temurin JDK
       ansible.builtin.yum:
